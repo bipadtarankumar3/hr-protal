@@ -1,5 +1,5 @@
 {{-- frontend/career/index.blade.php --}}
-@extends('frontend.layouts.home')
+@extends('frontend.layouts.app')
 
 @section('title', 'Careers at RYDZAA')
 
@@ -81,7 +81,7 @@
                                 <p class="mb-1"><i class="fas fa-briefcase me-2"></i>5+ Years Experience</p>
                                 <p class="mb-0"><i class="fas fa-code me-2"></i>Node.js, MongoDB, AWS</p>
                             </div>
-                            <a href="{{ URL::to('career.apply', ['jobId' => 'DEV001']) }}" class="btn btn-primary w-100">
+                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
                                 Apply Now
                             </a>
                         </div>
@@ -105,7 +105,7 @@
                                 <p class="mb-1"><i class="fas fa-briefcase me-2"></i>Fresher</p>
                                 <p class="mb-0"><i class="fas fa-tasks me-2"></i>Process Management, Analytics</p>
                             </div>
-                            <a href="{{ URL::to('career.apply', ['jobId' => 'OPS001']) }}" class="btn btn-primary w-100">
+                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
                                 Apply Now
                             </a>
                         </div>
@@ -129,7 +129,7 @@
                                 <p class="mb-1"><i class="fas fa-briefcase me-2"></i>3+ Years Experience</p>
                                 <p class="mb-0"><i class="fas fa-code me-2"></i>React.js, JavaScript, CSS</p>
                             </div>
-                            <a href="{{ URL::to('career.apply', ['jobId' => 'DEV002']) }}" class="btn btn-primary w-100">
+                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
                                 Apply Now
                             </a>
                         </div>
@@ -153,7 +153,7 @@
                                 <p class="mb-1"><i class="fas fa-briefcase me-2"></i>Fresher</p>
                                 <p class="mb-0"><i class="fas fa-headset me-2"></i>Communication, Problem Solving</p>
                             </div>
-                            <a href="{{ URL::to('career.apply', ['jobId' => 'SUP001']) }}" class="btn btn-primary w-100">
+                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
                                 Apply Now
                             </a>
                         </div>
@@ -177,7 +177,7 @@
                                 <p class="mb-1"><i class="fas fa-briefcase me-2"></i>4+ Years Experience</p>
                                 <p class="mb-0"><i class="fas fa-chart-line me-2"></i>Financial Analysis, Excel</p>
                             </div>
-                            <a href="{{ URL::to('career.apply', ['jobId' => 'FIN001']) }}" class="btn btn-primary w-100">
+                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
                                 Apply Now
                             </a>
                         </div>

@@ -8,7 +8,7 @@ use Illuminate\Http\Request;
 class JobApplyController extends Controller
 {
     //
-    public function apply() {
+    public function apply($id) {
         return view('frontend.careers.apply');
     }
 }

@@ -2,6 +2,10 @@
 
 @section('content')
 
+
+
+ <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row gy-6">
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
@@ -160,6 +164,8 @@
     Payroll is calculated based on Pulse Log attendance up to
     <strong>25th of the month</strong>. Payslips are generated on the
     <strong>last working day</strong>.
+</div>
+</div>
 </div>
 
 @endsection

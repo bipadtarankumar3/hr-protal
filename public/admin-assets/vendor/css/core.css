@@ -32,7 +32,7 @@
   --bs-gray-700: #6d6777;
   --bs-gray-800: #585164;
   --bs-gray-900: #433c50;
-  --bs-primary: #8c57ff;
+  --bs-primary: #a3070b;
   --bs-secondary: #8a8d93;
   --bs-success: #56ca00;
   --bs-info: #16b1ff;
@@ -23721,7 +23721,8 @@ body {
   transition: block-size 0.3s ease-in-out;
 }
 .menu-item.active > .menu-link:not(.menu-toggle) {
-  background: linear-gradient(270deg, var(--bs-primary) 0%, color-mix(in sRGB, var(--bs-primary) 52%, var(--bs-white)) 100%);
+  background: linear-gradient(270deg, #c60006 0%, 
+color-mix(in sRGB, #a80a0e 52%, var(--bs-white)) 100%);
   box-shadow: var(--bs-box-shadow-sm);
   color: var(--bs-menu-active-color);
 }

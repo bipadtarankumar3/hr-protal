@@ -1,5 +1,5 @@
 {{-- frontend/career/apply.blade.php --}}
-@extends('frontend.layouts.home')
+@extends('frontend.layouts.app')
 
 @section('title', 'Apply for Position')
 
@@ -17,7 +17,7 @@
                             </h4>
                         </div>
                         <div class="card-body">
-                            <form id="applicationForm" method="POST" action="{{ route('career.submit') }}" enctype="multipart/form-data">
+                            <form id="applicationForm" method="POST" action="{{ URL::to('career.submit') }}" enctype="multipart/form-data">
                                 @csrf
                                 <input type="hidden" name="job_id" value="{{ $jobId ?? 'DEV001' }}">
                                 

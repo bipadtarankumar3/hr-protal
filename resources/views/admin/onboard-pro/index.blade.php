@@ -2,6 +2,10 @@
 
 @section('content')
 
+
+
+ <div class="container-xxl flex-grow-1 container-p-y">
+              <div class="row gy-6">
 <!-- Page Header -->
 <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
@@ -183,6 +187,8 @@
     <button class="btn btn-primary">
         Submit for Verification
     </button>
+</div>
+</div>
 </div>
 
 @endsection
