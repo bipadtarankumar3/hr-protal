@@ -21,23 +21,89 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/', [DashboardController::class, 'index'])->name('admin.dashboard');
 
+    // Talent Hub
     Route::get('/talent-hub', [TalentHubController::class, 'index']);
     Route::get('/talent-hub/create', [TalentHubController::class, 'create']);
     Route::get('/talent-hub/applicants', [TalentHubController::class, 'applicants']);
+    Route::get('/talent-hub/{id}/edit', [TalentHubController::class, 'edit']);
+    Route::get('/talent-hub/{id}', [TalentHubController::class, 'show']);
 
+    // Hire Desk
     Route::get('/hire-desk', [HireDeskController::class, 'index']);
     Route::get('/hire-desk/offer', [HireDeskController::class, 'offer']);
+    Route::get('/hire-desk/{id}/edit', [HireDeskController::class, 'edit']);
+    Route::get('/hire-desk/{id}', [HireDeskController::class, 'show']);
+
+    // Onboard Pro
     Route::get('/onboard-pro', [OnboardProController::class, 'index']);
+    Route::get('/onboard-pro/{id}/edit', [OnboardProController::class, 'edit']);
+    Route::get('/onboard-pro/{id}', [OnboardProController::class, 'show']);
+
+    // Team Map
     Route::get('/team-map', [TeamMapController::class, 'index']);
+    Route::get('/team-map/{id}/edit', [TeamMapController::class, 'edit']);
+    Route::get('/team-map/{id}', [TeamMapController::class, 'show']);
+
+    // Pulse Log
     Route::get('/pulse-log', [PulseLogController::class, 'index']);
+    Route::get('/pulse-log/{id}/edit', [PulseLogController::class, 'edit']);
+    Route::get('/pulse-log/{id}', [PulseLogController::class, 'show']);
+
+    // Time Away
     Route::get('/time-away', [TimeAwayController::class, 'index']);
+    Route::get('/time-away/create', [TimeAwayController::class, 'create']);
+    Route::get('/time-away/{id}/edit', [TimeAwayController::class, 'edit']);
+    Route::get('/time-away/{id}', [TimeAwayController::class, 'show']);
+
+    // Leave Track
     Route::get('/leave-track', [LeaveTrackController::class, 'index']);
+    Route::get('/leave-track/create', [LeaveTrackController::class, 'create']);
+    Route::get('/leave-track/{id}/edit', [LeaveTrackController::class, 'edit']);
+    Route::get('/leave-track/{id}', [LeaveTrackController::class, 'show']);
+
+    // Pay Pulse
     Route::get('/pay-pulse', [PayPulseController::class, 'index']);
+    Route::get('/pay-pulse/{id}/edit', [PayPulseController::class, 'edit']);
+    Route::get('/pay-pulse/{id}', [PayPulseController::class, 'show']);
+
+    // Buzz Desk
     Route::get('/buzz-desk', [BuzzDeskController::class, 'index']);
+    Route::get('/buzz-desk/create', [BuzzDeskController::class, 'create']);
+    Route::get('/buzz-desk/{id}/edit', [BuzzDeskController::class, 'edit']);
+    Route::get('/buzz-desk/{id}', [BuzzDeskController::class, 'show']);
+
+    // Talent Vault
     Route::get('/talent-vault', [TalentVaultController::class, 'index']);
+    Route::get('/talent-vault/create', [TalentVaultController::class, 'create']);
+    Route::get('/talent-vault/{id}/edit', [TalentVaultController::class, 'edit']);
+    Route::get('/talent-vault/{id}', [TalentVaultController::class, 'show']);
+
+    // Project Desk
     Route::get('/project-desk', [ProjectDeskController::class, 'index']);
+    Route::get('/project-desk/create', [ProjectDeskController::class, 'create']);
+    Route::get('/project-desk/{id}/edit', [ProjectDeskController::class, 'edit']);
+    Route::get('/project-desk/{id}', [ProjectDeskController::class, 'show']);
+
+    // Curtain Call
     Route::get('/curtain-call', [CurtainCallController::class, 'index']);
+    Route::get('/curtain-call/resign', [CurtainCallController::class, 'resign']);
+    Route::get('/curtain-call/{id}/edit', [CurtainCallController::class, 'edit']);
+    Route::get('/curtain-call/{id}', [CurtainCallController::class, 'show']);
+
+    // OffBoard Desk
     Route::get('/offboard-desk', [OffBoardDeskController::class, 'index']);
+    Route::get('/offboard-desk/{id}/edit', [OffBoardDeskController::class, 'edit']);
+    Route::get('/offboard-desk/{id}', [OffBoardDeskController::class, 'show']);
+
+    // Role Master
     Route::get('/role-master', [RoleMasterController::class, 'index']);
+    Route::get('/role-master/create', [RoleMasterController::class, 'create']);
+    Route::get('/role-master/{id}/edit', [RoleMasterController::class, 'edit']);
+    Route::get('/role-master/{id}', [RoleMasterController::class, 'show']);
+
+    // Learn Zone
     Route::get('/learn-zone', [LearnZoneController::class, 'index']);
+    Route::get('/learn-zone/create', [LearnZoneController::class, 'create']);
+    Route::get('/learn-zone/{id}/edit', [LearnZoneController::class, 'edit']);
+    Route::get('/learn-zone/{id}', [LearnZoneController::class, 'show']);
 });

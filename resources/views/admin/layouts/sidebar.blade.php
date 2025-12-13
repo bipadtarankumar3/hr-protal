@@ -37,30 +37,26 @@
       </a>
       <ul class="menu-sub">
         <li class="menu-item">
-          <a href="{{ url('/admin/talent-hub') }}" class="menu-link">
-            <div>Job Listings</div>
-          </a>
+          <a href="{{ url('/admin/talent-hub') }}" class="menu-link"><i class="menu-icon ri ri-list-check-2"></i> Job Listings</a>
         </li>
         <li class="menu-item">
-          <a href="{{ URL::to('/admin/talent-hub/create') }}" class="menu-link">
-            <div>Create Job</div>
-          </a>
+          <a href="{{ url('/admin/talent-hub/create') }}" class="menu-link"><i class="menu-icon ri ri-add-line"></i> Create Job</a>
+        </li>
+        <li class="menu-item">
+          <a href="{{ url('/admin/talent-hub/applicants') }}" class="menu-link"><i class="menu-icon ri ri-user-search-line"></i> Applicants</a>
         </li>
       </ul>
     </li>
 
-    <li class="menu-item {{ request()->is('admin/hire-desk*') ? 'active' : '' }}">
-      <a href="{{ url('/admin/hire-desk') }}" class="menu-link">
-        <i class="menu-icon ri ri-user-search-line"></i>
-        <div>Hire Desk</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/hire-desk*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/hire-desk') }}" class="menu-link"><i class="menu-icon ri ri-user-star-line"></i> Hire Desk</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/hire-desk/offer') }}" class="menu-link"><i class="menu-icon ri ri-mail-send-line"></i> Offer Letters</a></li>
+      </ul>
     </li>
 
-    <li class="menu-item {{ request()->is('admin/onboard-pro*') ? 'active' : '' }}">
-      <a href="{{ url('/admin/onboard-pro') }}" class="menu-link">
-        <i class="menu-icon ri ri-user-add-line"></i>
-        <div>Onboard Pro</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/onboard-pro*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/onboard-pro') }}" class="menu-link"><i class="menu-icon ri ri-user-add-line"></i> Onboard Pro</a>
     </li>
 
     <!-- Workforce -->
@@ -68,32 +64,17 @@
       <span class="menu-header-text">Workforce</span>
     </li>
 
-    <li class="menu-item">
-      <a href="{{ url('/admin/team-map') }}" class="menu-link">
-        <i class="menu-icon ri ri-group-line"></i>
-        <div>Team Map</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/team-map*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/team-map') }}" class="menu-link"><i class="menu-icon ri ri-group-line"></i> Team Map</a>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/pulse-log') }}" class="menu-link">
-        <i class="menu-icon ri ri-time-line"></i>
-        <div>Pulse Log</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/pulse-log*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/pulse-log') }}" class="menu-link"><i class="menu-icon ri ri-time-line"></i> Pulse Log</a>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/time-away') }}" class="menu-link">
-        <i class="menu-icon ri ri-calendar-event-line"></i>
-        <div>Time Away</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/time-away*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/time-away') }}" class="menu-link"><i class="menu-icon ri ri-calendar-event-line"></i> Time Away</a>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/leave-track') }}" class="menu-link">
-        <i class="menu-icon ri ri-calendar-check-line"></i>
-        <div>Leave Track</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/leave-track*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/leave-track') }}" class="menu-link"><i class="menu-icon ri ri-calendar-check-line"></i> Leave Track</a>
     </li>
 
     <!-- Payroll -->
@@ -101,11 +82,8 @@
       <span class="menu-header-text">Payroll</span>
     </li>
 
-    <li class="menu-item">
-      <a href="{{ url('/admin/pay-pulse') }}" class="menu-link">
-        <i class="menu-icon ri ri-money-rupee-circle-line"></i>
-        <div>Pay Pulse</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/pay-pulse*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/pay-pulse') }}" class="menu-link"><i class="menu-icon ri ri-money-rupee-circle-line"></i> Pay Pulse</a>
     </li>
 
     <!-- HR Operations -->
@@ -113,25 +91,17 @@
       <span class="menu-header-text">HR Operations</span>
     </li>
 
-    <li class="menu-item">
-      <a href="{{ url('/admin/talent-vault') }}" class="menu-link">
-        <i class="menu-icon ri ri-folder-user-line"></i>
-        <div>Talent Vault</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/talent-vault*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/talent-vault') }}" class="menu-link"><i class="menu-icon ri ri-folder-user-line"></i> Talent Vault</a>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/project-desk') }}" class="menu-link">
-        <i class="menu-icon ri ri-folder-3-line"></i>
-        <div>Project Desk</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/project-desk*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/project-desk') }}" class="menu-link"><i class="menu-icon ri ri-folder-3-line"></i> Project Desk</a>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/buzz-desk') }}" class="menu-link">
-        <i class="menu-icon ri ri-megaphone-line"></i>
-        <div>Buzz Desk</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/buzz-desk*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/buzz-desk') }}" class="menu-link"><i class="menu-icon ri ri-megaphone-line"></i> Buzz Desk</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/buzz-desk/create') }}" class="menu-link"><i class="menu-icon ri ri-add-circle-line"></i> Create Announcement</a></li>
+      </ul>
     </li>
 
     <!-- Exit Management -->
@@ -139,18 +109,14 @@
       <span class="menu-header-text">Exit Management</span>
     </li>
 
-    <li class="menu-item">
-      <a href="{{ url('/admin/curtain-call') }}" class="menu-link">
-        <i class="menu-icon ri ri-logout-box-line"></i>
-        <div>Curtain Call</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/curtain-call*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/curtain-call') }}" class="menu-link"><i class="menu-icon ri ri-logout-box-line"></i> Curtain Call</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/curtain-call/resign') }}" class="menu-link"><i class="menu-icon ri ri-door-open-line"></i> Resignation Form</a></li>
+      </ul>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/offboard-desk') }}" class="menu-link">
-        <i class="menu-icon ri ri-file-list-3-line"></i>
-        <div>OffBoard Desk</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/offboard-desk*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/offboard-desk') }}" class="menu-link"><i class="menu-icon ri ri-file-list-3-line"></i> OffBoard Desk</a>
     </li>
 
     <!-- System -->
@@ -158,18 +124,17 @@
       <span class="menu-header-text">System</span>
     </li>
 
-    <li class="menu-item">
-      <a href="{{ url('/admin/role-master') }}" class="menu-link">
-        <i class="menu-icon ri ri-shield-user-line"></i>
-        <div>Role Master</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/role-master*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/role-master') }}" class="menu-link"><i class="menu-icon ri ri-shield-user-line"></i> Role Master</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/role-master/create') }}" class="menu-link"><i class="menu-icon ri ri-add-circle-line"></i> Create Role</a></li>
+      </ul>
     </li>
-
-    <li class="menu-item">
-      <a href="{{ url('/admin/learn-zone') }}" class="menu-link">
-        <i class="menu-icon ri ri-book-open-line"></i>
-        <div>Learn Zone</div>
-      </a>
+    <li class="menu-item {{ request()->is('admin/learn-zone*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/learn-zone') }}" class="menu-link"><i class="menu-icon ri ri-book-open-line"></i> Learn Zone</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/learn-zone/create') }}" class="menu-link"><i class="menu-icon ri ri-add-circle-line"></i> Add Resource</a></li>
+      </ul>
     </li>
 
   </ul>
