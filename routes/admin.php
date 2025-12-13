@@ -23,8 +23,10 @@ Route::prefix('admin')->group(function () {
 
     Route::get('/talent-hub', [TalentHubController::class, 'index']);
     Route::get('/talent-hub/create', [TalentHubController::class, 'create']);
+    Route::get('/talent-hub/applicants', [TalentHubController::class, 'applicants']);
 
     Route::get('/hire-desk', [HireDeskController::class, 'index']);
+    Route::get('/hire-desk/offer', [HireDeskController::class, 'offer']);
     Route::get('/onboard-pro', [OnboardProController::class, 'index']);
     Route::get('/team-map', [TeamMapController::class, 'index']);
     Route::get('/pulse-log', [PulseLogController::class, 'index']);

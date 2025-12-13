@@ -9,4 +9,5 @@ class TalentHubController extends Controller
 {
     public function index() { return view('admin.talent-hub.index'); }
     public function create() { return view('admin.talent-hub.create'); }
+    public function applicants() { return view('admin.talent-hub.applicants'); }
 }
