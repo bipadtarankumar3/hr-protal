@@ -1,0 +1,7 @@
+use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\CareerController;
+use App\Http\Controllers\Frontend\JobApplyController;
+
+Route::get('/home', [HomeController::class, 'index']);
+Route::get('/careers', [CareerController::class, 'index']);
+Route::get('/careers/apply', [JobApplyController::class, 'apply']);
