@@ -1,3 +1,4 @@
+<?php
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\TalentHubController;

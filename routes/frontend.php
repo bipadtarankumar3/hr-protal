@@ -1,3 +1,5 @@
+<?php
+
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\CareerController;
 use App\Http\Controllers\Frontend\JobApplyController;
