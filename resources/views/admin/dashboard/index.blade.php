@@ -123,7 +123,7 @@
         </div>
 
         <!-- Payroll & Attendance Status -->
-        <div class="col-xl-6">
+        {{-- <div class="col-xl-6">
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between">
                     <h6 class="mb-0">Payroll & Attendance Status</h6>
@@ -155,7 +155,7 @@
                     </ul>
                 </div>
             </div>
-        </div>
+        </div> --}}
 
         <!-- Leave & Absence -->
         <div class="col-xl-6">

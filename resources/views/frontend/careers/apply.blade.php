@@ -5,7 +5,7 @@
 
 @section('content')
     <!-- Application Form -->
-    <section class="section-padding">
+    <section class="section-padding my-4">
         <div class="container">
             <div class="row jutify-content-center">
                 <div class="col-lg-12">

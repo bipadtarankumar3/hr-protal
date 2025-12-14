@@ -184,9 +184,9 @@
     </li>
     <li class="menu-item {{ request()->is('admin/learn-zone*') ? 'active open' : '' }}">
       <a href="{{ url('/admin/learn-zone') }}" class="menu-link"><i class="menu-icon ri ri-book-open-line"></i> Learn Zone</a>
-      <ul class="menu-sub">
+      {{-- <ul class="menu-sub">
         <li class="menu-item"><a href="{{ url('/admin/learn-zone/create') }}" class="menu-link"><i class="menu-icon ri ri-add-circle-line"></i> Add Resource</a></li>
-      </ul>
+      </ul> --}}
     </li>
 
   </ul>

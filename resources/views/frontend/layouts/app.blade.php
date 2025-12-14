@@ -40,7 +40,7 @@
 	        <ul class="navbar-nav ml-auto">
 	          {{-- <li class="nav-item"><a href="{{URL::to('/')}}" class="nav-link">Home</a></li> --}}
 	          {{-- <li class="nav-item"><a href="about.html" class="nav-link">About Us</a></li> --}}
-	          <li class="nav-item"><a href="{{URL::to('/')}}" class="nav-link">Book Your Rides</a></li>
+	          <li class="nav-item"><a href="{{URL::to('/')}}" class="nav-link">Apply</a></li>
 	          {{-- <li class="nav-item"><a href="contact.html" class="nav-link">Contact Us</a></li> --}}
 	          <li class="nav-item"><a href="{{URL::to('/login')}}" class="nav-link">Login</a></li>
               <li class="nav-item"></li>
