@@ -9,6 +9,9 @@
                 <h4 class="fw-semibold mb-1">Hire Desk</h4>
                 <p class="text-muted mb-0">Shortlisted candidates & offer management</p>
             </div>
+            <a href="{{URL::to('/admin/offer-letters')}}" class="btn btn-outline-secondary">
+                <i class="ri ri-arrow-left-line"></i> Offer Lits
+            </a>
         </div>
         <!-- Pipeline Summary -->
         <div class="row g-3 mb-4">

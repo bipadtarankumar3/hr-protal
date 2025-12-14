@@ -51,12 +51,17 @@
     <li class="menu-item {{ request()->is('admin/hire-desk*') ? 'active open' : '' }}">
       <a href="{{ url('/admin/hire-desk') }}" class="menu-link"><i class="menu-icon ri ri-user-star-line"></i> Hire Desk</a>
       <ul class="menu-sub">
-        <li class="menu-item"><a href="{{ url('/admin/hire-desk/offer') }}" class="menu-link"><i class="menu-icon ri ri-mail-send-line"></i> Offer Letters</a></li>
+        {{-- <li class="menu-item"><a href="{{ url('/admin/hire-desk/offer') }}" class="menu-link"><i class="menu-icon ri ri-mail-send-line"></i> Offer Letters (Hire Desk)</a></li> --}}
+        {{-- <li class="menu-item"><a href="{{ url('/admin/offer-letters') }}" class="menu-link"><i class="menu-icon ri ri-mail-send-line"></i> Offer Letters (Library)</a></li> --}}
       </ul>
     </li>
 
     <li class="menu-item {{ request()->is('admin/onboard-pro*') ? 'active open' : '' }}">
-      <a href="{{ url('/admin/onboard-pro') }}" class="menu-link"><i class="menu-icon ri ri-user-add-line"></i> Onboard Pro</a>
+      <a href="javascript:void(0);" class="menu-link menu-toggle"><i class="menu-icon ri ri-user-add-line"></i> Onboard Pro</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/onboard-pro') }}" class="menu-link"><i class="menu-icon ri ri-user-add-line"></i> Overview</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/kyc') }}" class="menu-link"><i class="menu-icon ri ri-file-list-3-line"></i> KYC & Documents</a></li>
+      </ul>
     </li>
 
     <!-- Workforce -->
@@ -83,7 +88,12 @@
     </li>
 
     <li class="menu-item {{ request()->is('admin/pay-pulse*') ? 'active open' : '' }}">
-      <a href="{{ url('/admin/pay-pulse') }}" class="menu-link"><i class="menu-icon ri ri-money-rupee-circle-line"></i> Pay Pulse</a>
+      <a href="javascript:void(0);" class="menu-link menu-toggle"><i class="menu-icon ri ri-money-rupee-circle-line"></i> Pay Pulse</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/pay-pulse') }}" class="menu-link"><i class="menu-icon ri ri-money-rupee-circle-line"></i> Overview</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/payslips') }}" class="menu-link"><i class="menu-icon ri ri-file-text-line"></i> Payslips</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/payslips/generate') }}" class="menu-link"><i class="menu-icon ri ri-play-circle-line"></i> Generate Payslips</a></li>
+      </ul>
     </li>
 
     <!-- HR Operations -->
@@ -119,9 +129,44 @@
       <a href="{{ url('/admin/offboard-desk') }}" class="menu-link"><i class="menu-icon ri ri-file-list-3-line"></i> OffBoard Desk</a>
     </li>
 
+    <!-- Organization -->
+    <li class="menu-header mt-3">
+      <span class="menu-header-text">Organization</span>
+    </li>
+
+    <li class="menu-item {{ request()->is('admin/departments*') ? 'active open' : '' }}">
+      <a href="javascript:void(0);" class="menu-link menu-toggle"><i class="menu-icon ri ri-building-line"></i> Departments</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/departments') }}" class="menu-link"><i class="menu-icon ri ri-list-check-2"></i> Department List</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/departments/create') }}" class="menu-link"><i class="menu-icon ri ri-add-line"></i> Create Department</a></li>
+      </ul>
+    </li>
+
+    <li class="menu-item {{ request()->is('admin/teams*') ? 'active open' : '' }}">
+      <a href="javascript:void(0);" class="menu-link menu-toggle"><i class="menu-icon ri ri-stack-line"></i> Team Master</a>
+      <ul class="menu-sub">
+        <li class="menu-item"><a href="{{ url('/admin/teams') }}" class="menu-link"><i class="menu-icon ri ri-list-check-2"></i> All Teams</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/create') }}" class="menu-link"><i class="menu-icon ri ri-add-line"></i> Create Team</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/tech') }}" class="menu-link"><i class="menu-icon ri ri-code-line"></i> Tech Team</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/ops') }}" class="menu-link"><i class="menu-icon ri ri-truck-line"></i> Ops Team</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/hr') }}" class="menu-link"><i class="menu-icon ri ri-user-heart-line"></i> HR Team</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/bpo') }}" class="menu-link"><i class="menu-icon ri ri-phone-line"></i> BPO Cell</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/marketing') }}" class="menu-link"><i class="menu-icon ri ri-pie-chart-line"></i> Marketing</a></li>
+        <li class="menu-item"><a href="{{ url('/admin/teams/finance') }}" class="menu-link"><i class="menu-icon ri ri-bank-line"></i> Finance</a></li>
+      </ul>
+    </li>
+
+    <li class="menu-item {{ request()->is('admin/grievance-cell*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/grievance-cell') }}" class="menu-link"><i class="menu-icon ri ri-service-line"></i> Grievance Cell</a>
+    </li>
+
     <!-- System -->
     <li class="menu-header mt-3">
       <span class="menu-header-text">System</span>
+    </li>
+
+    <li class="menu-item {{ request()->is('admin/users*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/users') }}" class="menu-link"><i class="menu-icon ri ri-user-line"></i> Users</a>
     </li>
 
     <li class="menu-item {{ request()->is('admin/role-master*') ? 'active open' : '' }}">
@@ -129,6 +174,9 @@
       <ul class="menu-sub">
         <li class="menu-item"><a href="{{ url('/admin/role-master/create') }}" class="menu-link"><i class="menu-icon ri ri-add-circle-line"></i> Create Role</a></li>
       </ul>
+    </li>
+    <li class="menu-item {{ request()->is('admin/audit-trail*') ? 'active open' : '' }}">
+      <a href="{{ url('/admin/audit-trail') }}" class="menu-link"><i class="menu-icon ri ri-time-line"></i> Audit Trail</a>
     </li>
     <li class="menu-item {{ request()->is('admin/learn-zone*') ? 'active open' : '' }}">
       <a href="{{ url('/admin/learn-zone') }}" class="menu-link"><i class="menu-icon ri ri-book-open-line"></i> Learn Zone</a>

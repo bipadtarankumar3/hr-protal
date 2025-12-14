@@ -16,6 +16,14 @@ use App\Http\Controllers\Admin\CurtainCallController;
 use App\Http\Controllers\Admin\OffBoardDeskController;
 use App\Http\Controllers\Admin\RoleMasterController;
 use App\Http\Controllers\Admin\LearnZoneController;
+use App\Http\Controllers\Admin\DepartmentController;
+use App\Http\Controllers\Admin\TeamController;
+use App\Http\Controllers\Admin\GrievanceCellController;
+use App\Http\Controllers\Admin\UserController;
+use App\Http\Controllers\Admin\OfferLetterController;
+use App\Http\Controllers\Admin\KycController;
+use App\Http\Controllers\Admin\PayslipController;
+use App\Http\Controllers\Admin\AuditTrailController;
 
 Route::prefix('admin')->group(function () {
 
@@ -106,4 +114,45 @@ Route::prefix('admin')->group(function () {
     Route::get('/learn-zone/create', [LearnZoneController::class, 'create']);
     Route::get('/learn-zone/{id}/edit', [LearnZoneController::class, 'edit']);
     Route::get('/learn-zone/{id}', [LearnZoneController::class, 'show']);
+
+    // Organization - Departments, Teams, Grievance Cell
+    Route::get('/departments', [DepartmentController::class, 'index']);
+    Route::get('/departments/create', [DepartmentController::class, 'create']);
+    Route::post('/departments', [DepartmentController::class, 'store']);
+    Route::get('/departments/{id}/edit', [DepartmentController::class, 'edit']);
+    Route::match(['put','patch'],'/departments/{id}', [DepartmentController::class, 'update']);
+    Route::delete('/departments/{id}', [DepartmentController::class, 'destroy']);
+    Route::get('/departments/{id}', [DepartmentController::class, 'show']);
+
+    Route::get('/teams', [TeamController::class, 'index']);
+    Route::get('/teams/create', [TeamController::class, 'create']);
+    Route::post('/teams', [TeamController::class, 'store']);
+    Route::get('/teams/{team}/edit', [TeamController::class, 'edit']);
+    Route::match(['put','patch'], '/teams/{team}', [TeamController::class, 'update']);
+    Route::delete('/teams/{team}', [TeamController::class, 'destroy']);
+    Route::get('/teams/{team}', [TeamController::class, 'show']);
+
+    Route::get('/grievance-cell', [GrievanceCellController::class, 'index']);
+    Route::get('/grievance-cell/{id}', [GrievanceCellController::class, 'show']);
+
+    // Users (Admin-managed)
+    Route::get('/users', [UserController::class, 'index']);
+    Route::get('/users/create', [UserController::class, 'create']);
+    Route::get('/users/{id}/edit', [UserController::class, 'edit']);
+    Route::get('/users/{id}', [UserController::class, 'show']);
+
+    // Offer Letter / KYC / Payslip / Audit
+    Route::get('/offer-letters', [OfferLetterController::class, 'index']);
+    Route::get('/offer-letters/{id}', [OfferLetterController::class, 'show']);
+    Route::get('/offer-letters/compose', [OfferLetterController::class, 'compose']);
+
+    Route::get('/kyc', [KycController::class, 'index']);
+    Route::get('/kyc/{id}', [KycController::class, 'show']);
+
+    Route::get('/payslips', [PayslipController::class, 'index']);
+    Route::get('/payslips/generate', [PayslipController::class, 'generate']);
+    Route::get('/payslips/{id}', [PayslipController::class, 'show']);
+
+    Route::get('/audit-trail', [AuditTrailController::class, 'index']);
+    Route::get('/audit-trail/{id}', [AuditTrailController::class, 'show']);
 });

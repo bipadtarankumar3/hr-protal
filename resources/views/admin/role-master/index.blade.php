@@ -7,16 +7,16 @@
  <div class="container-xxl flex-grow-1 container-p-y">
               <div class="row gy-6">
 <!-- Page Header -->
-<div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
     <div>
         <h4 class="fw-semibold mb-1">Role Master</h4>
         <p class="text-muted mb-0">
             Define organization roles & reporting hierarchy
         </p>
     </div>
-    <button class="btn btn-primary">
+    <a href="{{ url('/admin/role-master/create') }}" class="btn btn-primary">
         <i class="ri ri-add-line"></i> Create Role
-    </button>
+    </a>
 </div>
 
 <!-- Roles Table -->
@@ -49,9 +49,7 @@
                             <span class="badge bg-success">Active</span>
                         </td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary">
-                                Edit
-                            </button>
+                            <a href="{{ url('/admin/role-master/1/edit') }}" class="btn btn-sm btn-outline-primary">Edit</a>
                         </td>
                     </tr>
 
@@ -67,9 +65,7 @@
                             <span class="badge bg-success">Active</span>
                         </td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-primary">
-                                Edit
-                            </button>
+                            <a href="{{ url('/admin/role-master/2/edit') }}" class="btn btn-sm btn-outline-primary">Edit</a>
                         </td>
                     </tr>
 
@@ -85,9 +81,7 @@
                             <span class="badge bg-secondary">Inactive</span>
                         </td>
                         <td class="text-end">
-                            <button class="btn btn-sm btn-outline-secondary" disabled>
-                                Locked
-                            </button>
+                            <a href="#" class="btn btn-sm btn-outline-secondary" disabled>Locked</a>
                         </td>
                     </tr>
 
