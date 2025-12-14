@@ -91,8 +91,10 @@
       <a href="javascript:void(0);" class="menu-link menu-toggle"><i class="menu-icon ri ri-money-rupee-circle-line"></i> Pay Pulse</a>
       <ul class="menu-sub">
         <li class="menu-item"><a href="{{ url('/admin/pay-pulse') }}" class="menu-link"><i class="menu-icon ri ri-money-rupee-circle-line"></i> Overview</a></li>
-        <li class="menu-item"><a href="{{ url('/admin/payslips') }}" class="menu-link"><i class="menu-icon ri ri-file-text-line"></i> Payslips</a></li>
+        {{-- <li class="menu-item"><a href="{{ url('/admin/payslips') }}" class="menu-link"><i class="menu-icon ri ri-file-text-line"></i> Payslips</a></li>
         <li class="menu-item"><a href="{{ url('/admin/payslips/generate') }}" class="menu-link"><i class="menu-icon ri ri-play-circle-line"></i> Generate Payslips</a></li>
+       --}}
+      
       </ul>
     </li>
 
@@ -109,9 +111,9 @@
     </li>
     <li class="menu-item {{ request()->is('admin/buzz-desk*') ? 'active open' : '' }}">
       <a href="{{ url('/admin/buzz-desk') }}" class="menu-link"><i class="menu-icon ri ri-megaphone-line"></i> Buzz Desk</a>
-      <ul class="menu-sub">
+      {{-- <ul class="menu-sub">
         <li class="menu-item"><a href="{{ url('/admin/buzz-desk/create') }}" class="menu-link"><i class="menu-icon ri ri-add-circle-line"></i> Create Announcement</a></li>
-      </ul>
+      </ul> --}}
     </li>
 
     <!-- Exit Management -->
@@ -121,9 +123,9 @@
 
     <li class="menu-item {{ request()->is('admin/curtain-call*') ? 'active open' : '' }}">
       <a href="{{ url('/admin/curtain-call') }}" class="menu-link"><i class="menu-icon ri ri-logout-box-line"></i> Curtain Call</a>
-      <ul class="menu-sub">
+      {{-- <ul class="menu-sub">
         <li class="menu-item"><a href="{{ url('/admin/curtain-call/resign') }}" class="menu-link"><i class="menu-icon ri ri-door-open-line"></i> Resignation Form</a></li>
-      </ul>
+      </ul> --}}
     </li>
     <li class="menu-item {{ request()->is('admin/offboard-desk*') ? 'active open' : '' }}">
       <a href="{{ url('/admin/offboard-desk') }}" class="menu-link"><i class="menu-icon ri ri-file-list-3-line"></i> OffBoard Desk</a>
@@ -147,12 +149,14 @@
       <ul class="menu-sub">
         <li class="menu-item"><a href="{{ url('/admin/teams') }}" class="menu-link"><i class="menu-icon ri ri-list-check-2"></i> All Teams</a></li>
         <li class="menu-item"><a href="{{ url('/admin/teams/create') }}" class="menu-link"><i class="menu-icon ri ri-add-line"></i> Create Team</a></li>
-        <li class="menu-item"><a href="{{ url('/admin/teams/tech') }}" class="menu-link"><i class="menu-icon ri ri-code-line"></i> Tech Team</a></li>
+        {{-- <li class="menu-item"><a href="{{ url('/admin/teams/tech') }}" class="menu-link"><i class="menu-icon ri ri-code-line"></i> Tech Team</a></li>
         <li class="menu-item"><a href="{{ url('/admin/teams/ops') }}" class="menu-link"><i class="menu-icon ri ri-truck-line"></i> Ops Team</a></li>
         <li class="menu-item"><a href="{{ url('/admin/teams/hr') }}" class="menu-link"><i class="menu-icon ri ri-user-heart-line"></i> HR Team</a></li>
         <li class="menu-item"><a href="{{ url('/admin/teams/bpo') }}" class="menu-link"><i class="menu-icon ri ri-phone-line"></i> BPO Cell</a></li>
         <li class="menu-item"><a href="{{ url('/admin/teams/marketing') }}" class="menu-link"><i class="menu-icon ri ri-pie-chart-line"></i> Marketing</a></li>
         <li class="menu-item"><a href="{{ url('/admin/teams/finance') }}" class="menu-link"><i class="menu-icon ri ri-bank-line"></i> Finance</a></li>
+       --}}
+      
       </ul>
     </li>
 

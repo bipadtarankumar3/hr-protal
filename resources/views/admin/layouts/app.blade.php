@@ -138,6 +138,8 @@
 </div>
 
 
+    <!-- / Layout wrapper -->
+    @section('modals')
 
     <!-- Core JS -->
 

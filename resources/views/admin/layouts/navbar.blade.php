@@ -45,7 +45,7 @@
                     <li>
                       <div class="dropdown-divider my-1"></div>
                     </li>
-                    <li>
+                    {{-- <li>
                       <a class="dropdown-item" href="#">
                         <i class="icon-base ri ri-user-line icon-md me-3"></i>
                         <span>My Profile</span>
@@ -65,13 +65,13 @@
                           <span class="flex-shrink-0 badge rounded-pill bg-danger">4</span>
                         </span>
                       </a>
-                    </li>
+                    </li> --}}
                     <li>
                       <div class="dropdown-divider my-1"></div>
                     </li>
                     <li>
                       <div class="d-grid px-4 pt-2 pb-1">
-                        <a class="btn btn-danger d-flex" href="javascript:void(0);">
+                        <a class="btn btn-danger d-flex" href="{{ url('login') }}">
                           <small class="align-middle">Logout</small>
                           <i class="ri ri-logout-box-r-line ms-2 ri-xs"></i>
                         </a>

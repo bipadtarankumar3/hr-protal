@@ -93,12 +93,12 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ URL::to('careers') }}">Careers</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="#about">About</a>
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="#contact">Contact</a>
-                    </li>
+                    </li> --}}
                     <li class="nav-item ms-2">
                         <a class="btn btn-outline-primary" href="{{ URL::to('login') }}">
                             <i class="fas fa-sign-in-alt me-2"></i>HR Login
