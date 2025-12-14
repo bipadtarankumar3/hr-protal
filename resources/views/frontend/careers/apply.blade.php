@@ -7,10 +7,10 @@
     <!-- Application Form -->
     <section class="section-padding">
         <div class="container">
-            <div class="row justify-content-center">
-                <div class="col-lg-10">
+            <div class="row jutify-content-center">
+                <div class="col-lg-12">
                     <div class="card shadow-sm border-0">
-                        <div class="card-header bg-primary text-white">
+                        <div class="card-header bg-danger text-white">
                             <h4 class="mb-0">
                                 <i class="fas fa-user-edit me-2"></i>
                                 Application Form - {{ $jobTitle ?? 'Senior Backend Developer' }}
@@ -311,7 +311,7 @@
 
                                 <!-- Submit Button -->
                                 <div class="text-center">
-                                    <button type="submit" class="btn btn-primary btn-lg px-5">
+                                    <button type="submit" class="btn btn-danger btn-lg px-5">
                                         <i class="fas fa-paper-plane me-2"></i>Submit Application
                                     </button>
                                     <p class="text-muted mt-3">
