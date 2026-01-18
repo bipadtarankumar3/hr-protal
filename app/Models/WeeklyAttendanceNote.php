@@ -5,31 +5,33 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PulseLog extends Model
+class WeeklyAttendanceNote extends Model
 {
     use HasFactory;
 
-    protected $table = 'pulse_logs';
+    protected $table = 'weekly_attendance_notes';
 
     protected $fillable = [
         'employee_id',
-        'date',
-        'check_in_time',
-        'check_out_time',
-        'duration_hours',
-        'status',
-        'is_active',
+        'week_start_date',
+        'week_end_date',
+        'notes',
+        'created_by',
     ];
 
     protected $casts = [
-        'date' => 'date',
-        'duration_hours' => 'decimal:2',
-        'is_active' => 'boolean',
+        'week_start_date' => 'date',
+        'week_end_date' => 'date',
     ];
 
     // Relationships
     public function employee()
     {
         return $this->belongsTo(User::class, 'employee_id');
+    }
+
+    public function creator()
+    {
+        return $this->belongsTo(User::class, 'created_by');
     }
 }

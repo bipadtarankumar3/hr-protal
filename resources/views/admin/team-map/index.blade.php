@@ -6,27 +6,45 @@
     <div class="d-flex justify-content-between align-items-center mb-4">
         <div>
             <h4 class="fw-semibold mb-1"><i class="ri ri-group-line me-2 text-primary"></i>Team Map</h4>
-            <p class="text-muted mb-0">Assign employees to projects and reporting managers</p>
+            <p class="text-muted mb-0">Manage team structure and assignments</p>
         </div>
-        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createTeamMapModal">
-            <i class="ri ri-user-add-line me-1"></i> New Assignment
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createModal" onclick="loadCreateForm()">
+            <i class="ri ri-user-add-line me-1"></i> Create Team Map
         </button>
     </div>
+
+    @if ($message = Session::get('success'))
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+            <i class="ri-check-line me-2"></i>{{ $message }}
+            <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+        </div>
+    @endif
 
     <!-- Filter Section -->
     <div class="card mb-4 bg-light">
         <div class="card-body">
             <form method="GET" action="{{ route('team-maps.index') }}" class="row g-3">
                 <div class="col-md-4">
-                    <label class="form-label">Search <small class="text-muted">(Project, Team, Name)</small></label>
+                    <label class="form-label">Search <small class="text-muted">(Team Name, Focus Area)</small></label>
                     <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
                 </div>
                 <div class="col-md-3">
+                    <label class="form-label">Department</label>
+                    <select name="department_id" class="form-select">
+                        <option value="">All Departments</option>
+                        @foreach($departments as $dept)
+                            <option value="{{ $dept->id }}" {{ request('department_id') == $dept->id ? 'selected' : '' }}>
+                                {{ $dept->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-md-2">
                     <label class="form-label">Status</label>
-                    <select name="status" class="form-select">
+                    <select name="is_active" class="form-select">
                         <option value="">All</option>
-                        <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Active</option>
-                        <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Inactive</option>
+                        <option value="true" {{ request('is_active') === 'true' ? 'selected' : '' }}>Active</option>
+                        <option value="false" {{ request('is_active') === 'false' ? 'selected' : '' }}>Inactive</option>
                     </select>
                 </div>
                 <div class="col-md-3 d-flex align-items-end gap-2">
@@ -48,45 +66,55 @@
                 <table class="table table-hover align-middle mb-0">
                     <thead class="table-light">
                         <tr>
-                            <th><i class="ri ri-id-card-line"></i> ID</th>
-                            <th><i class="ri ri-team-line"></i> Team Name</th>
-                            <th><i class="ri ri-building-line"></i> Department</th>
-                            <th><i class="ri ri-user-star-line"></i> Team Lead</th>
-                            <th><i class="ri ri-group-line"></i> Members</th>
-                            <th><i class="ri ri-calendar-event-line"></i> Created</th>
-                            <th class="text-end"><i class="ri ri-settings-3-line"></i> Action</th>
+                            <th>Team Name</th>
+                            <th>Department</th>
+                            <th>Team Lead</th>
+                            <th>Members</th>
+                            <th>Focus Area</th>
+                            <th>Status</th>
+                            <th>Created</th>
+                            <th class="text-end">Actions</th>
                         </tr>
                     </thead>
                     <tbody>
                         @forelse($team_maps as $map)
                         <tr>
-                            <td>{{ $map->id }}</td>
-                            <td>{{ $map->team_name ?? 'N/A' }}</td>
-                            <td><span class="badge bg-info">{{ $map->department->name ?? 'N/A' }}</span></td>
-                            <td>{{ $map->teamLead->name ?? 'Unassigned' }}</td>
-                            <td>{{ $map->member_count ?? 0 }}</td>
-                            <td>{{ $map->created_at ? $map->created_at->format('d M Y') : 'N/A' }}</td>
+                            <td><strong>{{ $map->team_name }}</strong></td>
+                            <td>
+                                @if($map->department)
+                                    <span class="badge bg-info">{{ $map->department->name }}</span>
+                                @else
+                                    <span class="text-muted">N/A</span>
+                                @endif
+                            </td>
+                            <td>
+                                @if($map->teamLead)
+                                    {{ $map->teamLead->name }}
+                                @else
+                                    <span class="text-muted">Unassigned</span>
+                                @endif
+                            </td>
+                            <td><span class="badge bg-primary">{{ $map->member_count }}</span></td>
+                            <td>{{ $map->focus_area ?? 'N/A' }}</td>
+                            <td>
+                                @if($map->is_active)
+                                    <span class="badge bg-success">Active</span>
+                                @else
+                                    <span class="badge bg-secondary">Inactive</span>
+                                @endif
+                            </td>
+                            <td>{{ $map->created_at->format('d M Y') }}</td>
                             <td class="text-end">
-                                <button type="button" 
-                                        class="btn btn-sm btn-outline-primary" 
-                                        title="View"
-                                        data-modal-id="viewTeamMapModal"
-                                        data-modal-url="{{ route('team-maps.show', $map->id) }}"
-                                        data-modal-title="View Team Map">
+                                <button type="button" class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#viewModal" onclick="loadViewData({{ $map->id }})" title="View">
                                     <i class="ri-eye-line"></i>
                                 </button>
-                                <button type="button" 
-                                        class="btn btn-sm btn-outline-secondary" 
-                                        title="Edit"
-                                        data-modal-id="editTeamMapModal"
-                                        data-modal-url="{{ route('team-maps.edit', $map->id) }}"
-                                        data-modal-title="Edit Team Map">
+                                <button type="button" class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal" onclick="loadEditForm({{ $map->id }})" title="Edit">
                                     <i class="ri-edit-line"></i>
                                 </button>
                                 <form action="{{ route('team-maps.destroy', $map->id) }}" method="POST" class="d-inline" onsubmit="return confirm('Are you sure you want to delete this team map?');">
                                     @csrf
                                     @method('DELETE')
-                                    <button type="submit" class="btn btn-sm btn-outline-danger" title="Delete">
+                                    <button type="submit" class="btn btn-sm btn-danger" title="Delete">
                                         <i class="ri-delete-bin-line"></i>
                                     </button>
                                 </form>
@@ -94,7 +122,10 @@
                         </tr>
                         @empty
                         <tr>
-                            <td colspan="7" class="text-center py-4 text-muted">No team mappings found</td>
+                            <td colspan="8" class="text-center py-4 text-muted">
+                                <i class="ri-inbox-2-line ri-3x mb-2 d-block"></i>
+                                No team mappings found. <a href="#" data-bs-toggle="modal" data-bs-target="#createModal" onclick="loadCreateForm()">Create one</a>
+                            </td>
                         </tr>
                         @endforelse
                     </tbody>
@@ -104,177 +135,230 @@
     </div>
 
     <!-- Pagination -->
-    <div class="mt-3">
-        {{ $team_maps->links() }}
-    </div>
-</div>
-@endsection
-        <!-- Create Team Map Modal -->
-        @component('admin.components.modal', [
-            'id' => 'createTeamMapModal',
-            'title' => 'Create Team Map',
-            'icon' => 'ri ri-user-add-line',
-            'size' => 'lg',
-            'formAction' => route('team-maps.store'),
-            'formMethod' => 'POST',
-            'submitText' => 'Create'
-        ])
-            @php
-                $departments = \App\Models\Department::all();
-                $users = \App\Models\User::all();
-            @endphp
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'team_name',
-                'label' => 'Team Name',
-                'type' => 'text',
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'department_id',
-                'label' => 'Department',
-                'type' => 'select',
-                'options' => $departments->pluck('name', 'id')->toArray(),
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'team_lead_id',
-                'label' => 'Team Lead',
-                'type' => 'select',
-                'options' => $users->pluck('name', 'id')->toArray(),
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'member_count',
-                'label' => 'Member Count',
-                'type' => 'number',
-                'value' => 1,
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'description',
-                'label' => 'Description',
-                'type' => 'textarea',
-                'rows' => 3
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'focus_area',
-                'label' => 'Focus Area',
-                'type' => 'text'
-            ])
-            @endcomponent
-        @endcomponent
+    @if($team_maps->hasPages())
+        <div class="d-flex justify-content-center mt-4">
+            {{ $team_maps->links() }}
+        </div>
+    @endif
 
-        <!-- View Team Map Modal -->
-        @component('admin.components.modal', [
-            'id' => 'viewTeamMapModal',
-            'title' => 'View Team Map',
-            'icon' => 'ri ri-eye-line',
-            'size' => 'lg',
-            'submitButton' => false,
-            'cancelText' => 'Close'
-        ])
-            <div id="viewTeamMapContent">
-                <div class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden">Loading...</span>
+    <!-- Create Modal -->
+    <div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="createModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="createModalLabel"><i class="ri-user-add-line me-2"></i>Create Team Map</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="createModalBody">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
                     </div>
                 </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitCreateForm()">Create</button>
+                </div>
             </div>
-        @endcomponent
+        </div>
+    </div>
 
-        <!-- Edit Team Map Modal -->
-        @component('admin.components.modal', [
-            'id' => 'editTeamMapModal',
-            'title' => 'Edit Team Map',
-            'icon' => 'ri ri-edit-line',
-            'size' => 'lg',
-            'formAction' => route('team-maps.update', ':id'),
-            'formMethod' => 'PUT',
-            'submitText' => 'Update'
-        ])
-            @php
-                $departments = \App\Models\Department::all();
-                $users = \App\Models\User::all();
-            @endphp
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'team_name',
-                'label' => 'Team Name',
-                'type' => 'text',
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'department_id',
-                'label' => 'Department',
-                'type' => 'select',
-                'options' => $departments->pluck('name', 'id')->toArray(),
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'team_lead_id',
-                'label' => 'Team Lead',
-                'type' => 'select',
-                'options' => $users->pluck('name', 'id')->toArray(),
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'member_count',
-                'label' => 'Member Count',
-                'type' => 'number',
-                'required' => true
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'description',
-                'label' => 'Description',
-                'type' => 'textarea',
-                'rows' => 3
-            ])
-            @endcomponent
-            
-            @component('admin.components.modal-form-field', [
-                'name' => 'focus_area',
-                'label' => 'Focus Area',
-                'type' => 'text'
-            ])
-            @endcomponent
-        @endcomponent
+    <!-- Edit Modal -->
+    <div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editModalLabel"><i class="ri-edit-line me-2"></i>Edit Team Map</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="editModalBody">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="button" class="btn btn-primary" onclick="submitEditForm()">Update</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-        @push('scripts')
-        <script>
-            // Handle edit modal form action update
-            document.querySelectorAll('[data-modal-id="editTeamMapModal"]').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const url = this.getAttribute('data-modal-url');
-                    const id = url.match(/\/(\d+)\//)?.[1];
-                    if (id) {
-                        const form = document.querySelector('#editTeamMapModal form');
-                        if (form) {
-                            form.action = form.action.replace(':id', id);
-                        }
-                    }
-                });
-            });
-        </script>
-        @endpush
+    <!-- View Modal -->
+    <div class="modal fade" id="viewModal" tabindex="-1" aria-labelledby="viewModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="viewModalLabel"><i class="ri-eye-line me-2"></i>View Team Map</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body" id="viewModalBody">
+                    <div class="text-center py-4">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="visually-hidden">Loading...</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
+
+@push('scripts')
+<script>
+    // Load create form
+    function loadCreateForm() {
+        document.getElementById('createModalBody').innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+        
+        fetch('{{ route("team-maps.create") }}', {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('createModalBody').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('createModalBody').innerHTML = '<div class="alert alert-danger">Error loading form</div>';
+        });
+    }
+
+    // Load edit form
+    function loadEditForm(id) {
+        document.getElementById('editModalBody').innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+        
+        fetch(`{{ url('admin/team-map') }}/${id}/edit`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('editModalBody').innerHTML = html;
+            // Set form action
+            const form = document.getElementById('editForm');
+            if (form) {
+                form.action = `{{ url('admin/team-map') }}/${id}`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('editModalBody').innerHTML = '<div class="alert alert-danger">Error loading form</div>';
+        });
+    }
+
+    // Load view data
+    function loadViewData(id) {
+        document.getElementById('viewModalBody').innerHTML = '<div class="text-center py-4"><div class="spinner-border text-primary" role="status"><span class="visually-hidden">Loading...</span></div></div>';
+        
+        fetch(`{{ url('admin/team-map') }}/${id}`, {
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'text/html'
+            }
+        })
+        .then(response => response.text())
+        .then(html => {
+            document.getElementById('viewModalBody').innerHTML = html;
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById('viewModalBody').innerHTML = '<div class="alert alert-danger">Error loading data</div>';
+        });
+    }
+
+    // Submit create form
+    function submitCreateForm() {
+        const form = document.getElementById('createForm');
+        if (!form) {
+            alert('Form not found');
+            return;
+        }
+
+        const formData = new FormData(form);
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                // Show validation errors
+                if (data.errors) {
+                    let errorMsg = 'Validation errors:\n';
+                    for (let field in data.errors) {
+                        errorMsg += data.errors[field][0] + '\n';
+                    }
+                    alert(errorMsg);
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to create'));
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error creating team map');
+        });
+    }
+
+    // Submit edit form
+    function submitEditForm() {
+        const form = document.getElementById('editForm');
+        if (!form) {
+            alert('Form not found');
+            return;
+        }
+
+        const formData = new FormData(form);
+        formData.append('_method', 'PUT');
+        
+        fetch(form.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest',
+                'Accept': 'application/json'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                // Show validation errors
+                if (data.errors) {
+                    let errorMsg = 'Validation errors:\n';
+                    for (let field in data.errors) {
+                        errorMsg += data.errors[field][0] + '\n';
+                    }
+                    alert(errorMsg);
+                } else {
+                    alert('Error: ' + (data.message || 'Failed to update'));
+                }
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert('Error updating team map');
+        });
+    }
+</script>
+@endpush
 @endsection

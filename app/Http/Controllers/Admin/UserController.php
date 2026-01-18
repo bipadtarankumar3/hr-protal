@@ -22,8 +22,8 @@ class UserController extends Controller
         }
 
         // Role filter
-        if ($request->filled('role')) {
-            $query->where('role', $request->input('role'));
+        if ($request->filled('role_id')) {
+            $query->where('role_id', $request->input('role_id'));
         }
 
         // Status filter
@@ -38,42 +38,51 @@ class UserController extends Controller
         $query->orderBy($sortBy, $sortOrder);
 
         // Pagination
-        $users = $query->paginate(15)->appends($request->query());
-        return view('admin.users.index', compact('users'));
+        $users = $query->with('role')->paginate(15)->appends($request->query());
+        $roles = \App\Models\RoleMaster::where('is_active', true)->orderBy('name')->get();
+        return view('admin.users.index', compact('users', 'roles'));
     }
 
     public function create()
     {
-        $roles = \App\Models\RoleMaster::where('status', 'active')->orderBy('name')->get();
+        $roles = \App\Models\RoleMaster::where('is_active', true)->orderBy('name')->get();
         return view('admin.users.create', compact('roles'));
     }
 
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'name' => 'required|string',
+            'name' => 'required|string|max:255',
             'email' => 'required|email|unique:users',
             'password' => 'required|min:8|confirmed',
+            'role_id' => 'nullable|exists:role_masters,id',
+            'is_active' => 'nullable|boolean',
         ]);
 
         $validated['password'] = bcrypt($validated['password']);
+        $validated['is_active'] = $request->has('is_active') ? true : false;
+        
         User::create($validated);
         
-        return redirect('/admin/users')->with('success', 'User created successfully');
+        return redirect()->route('users.index')->with('success', 'User created successfully');
     }
 
-    public function edit(User $user)
+    public function edit($id)
     {
-        $roles = \App\Models\RoleMaster::where('status', 'active')->orderBy('name')->get();
+        $user = User::findOrFail($id);
+        $roles = \App\Models\RoleMaster::where('is_active', true)->orderBy('name')->get();
         return view('admin.users.edit', compact('user', 'roles'));
     }
 
-    public function update(Request $request, User $user)
+    public function update(Request $request, $id)
     {
+        $user = User::findOrFail($id);
         $validated = $request->validate([
-            'name' => 'required|string',
-            'email' => 'required|email|unique:users,email,' . $user->id,
+            'name' => 'required|string|max:255',
+            'email' => 'required|email|unique:users,email,' . $id,
             'password' => 'nullable|min:8|confirmed',
+            'role_id' => 'nullable|exists:role_masters,id',
+            'is_active' => 'nullable|boolean',
         ]);
 
         if ($request->filled('password')) {
@@ -82,18 +91,22 @@ class UserController extends Controller
             unset($validated['password']);
         }
 
+        $validated['is_active'] = $request->has('is_active') ? true : false;
+
         $user->update($validated);
-        return redirect('/admin/users')->with('success', 'User updated successfully');
+        return redirect()->route('users.index')->with('success', 'User updated successfully');
     }
 
-    public function show(User $user)
+    public function show($id)
     {
+        $user = User::with('role')->findOrFail($id);
         return view('admin.users.show', compact('user'));
     }
 
-    public function destroy(User $user)
+    public function destroy($id)
     {
+        $user = User::findOrFail($id);
         $user->delete();
-        return redirect('/admin/users')->with('success', 'User deleted successfully');
+        return redirect()->route('users.index')->with('success', 'User deleted successfully');
     }
 }

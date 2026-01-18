@@ -22,8 +22,9 @@ class RoleMasterController extends Controller
         }
 
         // Status filter
-        if ($request->filled('status')) {
-            $query->where('status', $request->input('status'));
+        if ($request->filled('is_active')) {
+            $is_active = $request->input('is_active') === 'true' ? 1 : 0;
+            $query->where('is_active', $is_active);
         }
 
         // Sorting
@@ -47,14 +48,16 @@ class RoleMasterController extends Controller
             'name' => 'required|string|max:255|unique:role_masters,name',
             'code' => 'required|string|max:50|unique:role_masters,code',
             'description' => 'nullable|string',
-            'permissions' => 'nullable|string',
             'salary_grade' => 'nullable|string|max:50',
+            'is_active' => 'nullable|boolean',
         ]);
 
-        $validated['is_active'] = true;
+        $validated['is_active'] = $request->has('is_active') ? true : false;
+        $validated['permissions'] = []; // Initialize empty permissions array
+        
         RoleMaster::create($validated);
 
-        return redirect('admin/role-master')->with('success', 'Role created successfully.');
+        return redirect()->route('role-masters.index')->with('success', 'Role created successfully.');
     }
 
     public function edit($id)
@@ -70,18 +73,21 @@ class RoleMasterController extends Controller
             'name' => 'required|string|max:255|unique:role_masters,name,' . $id,
             'code' => 'required|string|max:50|unique:role_masters,code,' . $id,
             'description' => 'nullable|string',
-            'permissions' => 'nullable|string',
             'salary_grade' => 'nullable|string|max:50',
+            'is_active' => 'nullable|boolean',
         ]);
 
+        $validated['is_active'] = $request->has('is_active') ? true : false;
+        
         $role_master->update($validated);
 
-        return redirect('admin/role-master')->with('success', 'Role updated successfully.');
+        return redirect()->route('role-masters.index')->with('success', 'Role updated successfully.');
     }
 
     public function show($id)
     {
         $role_master = RoleMaster::findOrFail($id);
+        // Permissions will be automatically cast to array by the model
         return view('admin.role-master.show', compact('role_master'));
     }
 
@@ -90,6 +96,83 @@ class RoleMasterController extends Controller
         $role_master = RoleMaster::findOrFail($id);
         $role_master->delete();
 
-        return redirect('admin/role-master')->with('success', 'Role deleted successfully.');
+        return redirect()->route('role-masters.index')->with('success', 'Role deleted successfully.');
+    }
+
+    /**
+     * Show permissions form for a role
+     */
+    public function showPermissions($id)
+    {
+        $role_master = RoleMaster::findOrFail($id);
+        $modules = $this->getAvailableModules();
+        
+        // Permissions will be automatically cast to array by the model
+        $permissions = $role_master->permissions ?? [];
+        if (!is_array($permissions)) {
+            $permissions = [];
+        }
+        
+        return view('admin.role-master.permissions', compact('role_master', 'modules', 'permissions'));
+    }
+
+    /**
+     * Update permissions for a role
+     */
+    public function updatePermissions(Request $request, $id)
+    {
+        $role_master = RoleMaster::findOrFail($id);
+        
+        $validated = $request->validate([
+            'permissions' => 'nullable|array',
+            'permissions.*' => 'nullable|array',
+        ]);
+
+        $permissions = $request->input('permissions', []);
+        // Clean up permissions - remove unchecked checkboxes
+        foreach ($permissions as $module => $perms) {
+            foreach ($perms as $key => $value) {
+                if ($value != '1') {
+                    unset($permissions[$module][$key]);
+                }
+            }
+        }
+        
+        // Model will automatically cast array to JSON due to the cast in RoleMaster model
+        $role_master->permissions = $permissions;
+        $role_master->save();
+
+        return redirect()->route('role-masters.index')->with('success', 'Permissions updated successfully.');
+    }
+
+    /**
+     * Get available modules for permissions
+     */
+    private function getAvailableModules()
+    {
+        return [
+            'Talent Hub' => 'talent-hub',
+            'Hire Desk' => 'hire-desk',
+            'Onboard Pro' => 'onboard-pro',
+            'Team Map' => 'team-map',
+            'Pulse Log' => 'pulse-log',
+            'Time Away' => 'time-away',
+            'Leave Track' => 'leave-track',
+            'Pay Pulse' => 'pay-pulse',
+            'Buzz Desk' => 'buzz-desk',
+            'Audit Trail' => 'audit-trail',
+            'Role Master' => 'role-master',
+            'Department' => 'departments',
+            'Team' => 'teams',
+            'Talent Vault' => 'talent-vault',
+            'Project Desk' => 'project-desk',
+            'Off Board Desk' => 'offboard-desk',
+            'Curtain Call' => 'curtain-call',
+            'Offer Letter' => 'offer-letters',
+            'KYC' => 'kyc',
+            'Payslip' => 'payslips',
+            'Learn Zone' => 'learn-zone',
+            'Grievance Cell' => 'grievance-cell',
+        ];
     }
 }

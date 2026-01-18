@@ -79,6 +79,7 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::match(['put', 'patch'], '/pulse-log/{id}', [PulseLogController::class, 'update'])->name('pulse-logs.update');
     Route::delete('/pulse-log/{id}', [PulseLogController::class, 'destroy'])->name('pulse-logs.destroy');
     Route::get('/pulse-log/{id}', [PulseLogController::class, 'show'])->name('pulse-logs.show');
+    Route::post('/pulse-log/save-weekly-notes', [PulseLogController::class, 'saveWeeklyNotes'])->name('pulse-logs.save-weekly-notes');
 
     // Time Away
     Route::get('/time-away', [TimeAwayController::class, 'index'])->name('time-aways.index');
@@ -161,6 +162,8 @@ Route::prefix('admin')->middleware(['auth'])->group(function () {
     Route::match(['put', 'patch'], '/role-master/{id}', [RoleMasterController::class, 'update'])->name('role-masters.update');
     Route::delete('/role-master/{id}', [RoleMasterController::class, 'destroy'])->name('role-masters.destroy');
     Route::get('/role-master/{id}', [RoleMasterController::class, 'show'])->name('role-masters.show');
+    Route::get('/role-master/{id}/permissions', [RoleMasterController::class, 'showPermissions'])->name('role-masters.permissions');
+    Route::post('/role-master/{id}/permissions', [RoleMasterController::class, 'updatePermissions'])->name('role-masters.permissions.update');
 
     // Learn Zone
     Route::get('/learn-zone', [LearnZoneController::class, 'index'])->name('learn-zones.index');

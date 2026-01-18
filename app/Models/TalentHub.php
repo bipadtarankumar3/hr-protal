@@ -12,32 +12,36 @@ class TalentHub extends Model
     protected $table = 'talent_hubs';
 
     protected $fillable = [
-        'job_id',
-        'candidate_name',
-        'email',
-        'phone',
-        'resume_path',
-        'status',
+        'employee_id',
+        'name',
+        'skills',
+        'experience_level',
+        'department',
+        'department_id',
+        'location',
+        'career_path',
         'applied_date',
-        'interview_date',
-        'offer_status',
+        'status',
+        'notes',
+        'application_limit',
+        'hiring_manager',
+        'project',
         'is_active',
     ];
 
     protected $casts = [
-        'applied_date' => 'datetime',
-        'interview_date' => 'datetime',
+        'applied_date' => 'date',
         'is_active' => 'boolean',
     ];
 
     // Relationships
-    public function job()
-    {
-        return $this->belongsTo(JobPosting::class, 'job_id');
-    }
-
     public function employee()
     {
         return $this->belongsTo(User::class, 'employee_id');
+    }
+
+    public function departmentRelation()
+    {
+        return $this->belongsTo(Department::class, 'department_id');
     }
 }

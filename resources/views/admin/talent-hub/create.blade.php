@@ -17,7 +17,8 @@
     </a>
 </div>
 
-<form>
+<form method="POST" action="{{ route('talent-hubs.store') }}">
+    @csrf
 
     <!-- Job Details -->
     <div class="card mb-4">
@@ -29,60 +30,60 @@
 
                 <div class="col-md-6">
                     <label class="form-label">Job Title</label>
-                    <input type="text" class="form-control" placeholder="e.g. Backend Developer">
+                    <input type="text" name="name" class="form-control" placeholder="e.g. Backend Developer" required>
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Department</label>
-                    <select class="form-select">
-                        <option>Select</option>
-                        <option>Tech</option>
-                        <option>Operations</option>
-                        <option>Support</option>
+                    <select name="department" class="form-select" required>
+                        <option value="">Select</option>
+                        @foreach($departments as $dept)
+                            <option value="{{ $dept->name }}">{{ $dept->name }}</option>
+                        @endforeach
                     </select>
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Location</label>
-                    <select class="form-select">
-                        <option>Select</option>
-                        <option>Durgapur</option>
-                        <option>Kolkata</option>
-                        <option>Remote</option>
+                    <select name="location" class="form-select">
+                        <option value="">Select</option>
+                        <option value="Durgapur">Durgapur</option>
+                        <option value="Kolkata">Kolkata</option>
+                        <option value="Remote">Remote</option>
                     </select>
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Experience Required</label>
-                    <select class="form-select">
-                        <option>Select</option>
-                        <option>Fresher</option>
-                        <option>Experienced</option>
+                    <select name="experience_level" class="form-select">
+                        <option value="">Select</option>
+                        <option value="junior">Fresher</option>
+                        <option value="mid">Experienced</option>
                     </select>
                 </div>
 
                 <div class="col-md-9">
                     <label class="form-label">Skills Required</label>
-                    <input type="text" class="form-control" placeholder="Node.js, MongoDB, Laravel">
+                    <input type="text" name="skills" class="form-control" placeholder="Node.js, MongoDB, Laravel">
                     <small class="text-muted">Comma separated skills</small>
                 </div>
 
                 <div class="col-md-12">
                     <label class="form-label">Job Description</label>
-                    <textarea class="form-control" rows="4"
+                    <textarea name="notes" class="form-control" rows="4"
                         placeholder="Describe roles, responsibilities, requirements..."></textarea>
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Application Limit</label>
-                    <input type="number" class="form-control" placeholder="e.g. 20">
+                    <input type="number" name="application_limit" class="form-control" placeholder="e.g. 20">
                 </div>
 
                 <div class="col-md-3">
                     <label class="form-label">Status</label>
-                    <select class="form-select">
-                        <option>Draft</option>
-                        <option>Published</option>
+                    <select name="status" class="form-select">
+                        <option value="pending">Draft</option>
+                        <option value="active">Published</option>
                     </select>
                 </div>
 
@@ -102,7 +103,7 @@
                     <label class="form-label">
                         Job On Request (Hiring Manager)
                     </label>
-                    <input type="text" class="form-control" placeholder="Manager Name">
+                    <input type="text" name="hiring_manager" class="form-control" placeholder="Manager Name">
                     <small class="text-muted">Internal use only (not visible on career page)</small>
                 </div>
 
@@ -110,7 +111,7 @@
                     <label class="form-label">
                         Specify Project
                     </label>
-                    <input type="text" class="form-control" placeholder="Project Code / Name">
+                    <input type="text" name="project" class="form-control" placeholder="Project Code / Name">
                     <small class="text-muted">Internal use only</small>
                 </div>
 
@@ -120,9 +121,9 @@
 
     <!-- Actions -->
     <div class="d-flex justify-content-end gap-2">
-        <button type="button" class="btn btn-outline-secondary">
-            Save as Draft
-        </button>
+        <a href="{{ route('talent-hubs.index') }}" class="btn btn-outline-secondary">
+            Cancel
+        </a>
         <button type="submit" class="btn btn-primary">
             Publish Job
         </button>
@@ -135,4 +136,3 @@
 
 
 @endsection
-s

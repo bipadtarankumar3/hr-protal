@@ -12,10 +12,11 @@ class RoleMaster extends Model
     protected $table = 'role_masters';
 
     protected $fillable = [
-        'role_name',
+        'name',
+        'code',
         'description',
         'permissions',
-        'level',
+        'salary_grade',
         'is_active',
     ];
 
