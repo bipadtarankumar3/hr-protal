@@ -1,95 +1,104 @@
 @extends('admin.layouts.app')
 
 @section('content')
-<style>
-    /* Premium UI Enhancements */
-    .premium-gradient {
-        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff;
-    }
-    .premium-card {
-        border-radius: 1.25rem;
-        box-shadow: 0 4px 24px rgba(106,17,203,0.08), 0 1.5px 6px rgba(37,117,252,0.08);
-        overflow: hidden;
-    }
-    .premium-table th, .premium-table td {
-        vertical-align: middle;
-        font-size: 1.05rem;
-    }
-    .premium-tabs .nav-link.active {
-        background: linear-gradient(90deg, #6a11cb 0%, #2575fc 100%);
-        color: #fff !important;
-        border-radius: 2rem;
-        box-shadow: 0 2px 8px rgba(37,117,252,0.08);
-    }
-    .premium-tabs .nav-link {
-        color: #6a11cb;
-        font-weight: 500;
-        border-radius: 2rem;
-        transition: all 0.2s;
-    }
-    .premium-tabs .nav-link:not(.active):hover {
-        background: #f3f6fd;
-        color: #2575fc;
-    }
-    .premium-badge {
-        font-size: 0.95rem;
-        padding: 0.4em 1em;
-        border-radius: 1rem;
-    }
-    .premium-btn {
-        border-radius: 2rem;
-        font-weight: 600;
-        padding: 0.5em 1.5em;
-        box-shadow: 0 2px 8px rgba(37,117,252,0.08);
-    }
-    .premium-card-header {
-        background: #f3f6fd;
-        border-bottom: 1px solid #e3e8f7;
-        border-radius: 1.25rem 1.25rem 0 0;
-    }
-    .premium-table thead {
-        background: #f3f6fd;
-    }
-    .premium-table tbody tr {
-        transition: background 0.2s;
-    }
-    .premium-table tbody tr:hover {
-        background: #f7faff;
-    }
-</style>
 <div class="container-xxl flex-grow-1 container-p-y">
     <div class="row gy-6">
         <!-- Page Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
-                <h4 class="fw-bold mb-1 p-3 d-inline-block"><i class="ri ri-calendar-check-line me-2"></i>Leave Track</h4>
-                <p class="text-muted mb-0 ms-2">Configure leave types, quotas & holidays</p>
+                <h4 class="fw-semibold mb-1"><i class="ri ri-calendar-check-line me-2"></i>Leave Track</h4>
+                <p class="text-muted mb-0">Track and manage employee leaves</p>
+            </div>
+            {{-- <a href="{{ route('leave-tracks.create') }}" class="btn btn-primary">
+                <i class="ri-add-line me-1"></i>New Leave Request
+            </a> --}}
+        </div>
+
+        <!-- Filter Form -->
+        <div class="card shadow-sm mb-4 w-100">
+            <div class="card-body">
+                <form method="GET" action="{{ route('leave-tracks.index') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by employee ID or leave type" value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">&nbsp;</label>
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="ri-search-line me-1"></i>Filter
+                        </button>
+                    </div>
+                </form>
             </div>
         </div>
-        <!-- Tabs -->
-        <ul class="nav nav-pills mb-4 justify-content-center premium-tabs">
-            <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#leaveTypes">
-                    <i class="ri ri-list-check-2"></i> Leave Configuration
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#nationalHolidays">
-                    <i class="ri ri-flag-2-line"></i> National Holidays
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#regionalHolidays">
-                    <i class="ri ri-map-pin-line"></i> Regional Holidays
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#hrMapping">
-                    <i class="ri ri-user-settings-line"></i> HR Mapping
-                </button>
-            </li>
-        </ul>
+
+        <!-- Leave Table -->
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Employee ID</th>
+                            <th>Leave Type</th>
+                            <th>Start Date</th>
+                            <th>End Date</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($leaves as $leave)
+                            <tr>
+                                <td>{{ $leave->employee_id }}</td>
+                                <td>{{ $leave->leave_type }}</td>
+                                <td>{{ $leave->start_date ? \Carbon\Carbon::parse($leave->start_date)->format('d M Y') : 'N/A' }}</td>
+                                <td>{{ $leave->end_date ? \Carbon\Carbon::parse($leave->end_date)->format('d M Y') : 'N/A' }}</td>
+                                <td>
+                                    @if($leave->status == 'pending')
+                                        <span class="badge bg-warning">Pending</span>
+                                    @elseif($leave->status == 'approved')
+                                        <span class="badge bg-success">Approved</span>
+                                    @else
+                                        <span class="badge bg-danger">Rejected</span>
+                                    @endif
+                                </td>
+                                <td>{{ $leave->created_at->format('d M Y') }}</td>
+                                <td>
+                                    <a href="{{ route('leave-tracks.show', $leave->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="ri-eye-line"></i>
+                                    </a>
+                                    <a href="{{ route('leave-tracks.edit', $leave->id) }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="ri-edit-line"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="7" class="text-center py-4 text-muted">
+                                    <i class="ri-inbox-line me-2"></i>No leave records found
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="w-100 mt-3">
+            {{ $leaves->links() }}
+        </div>
+    
         <div class="tab-content">
             <!-- Leave Configuration -->
             <div class="tab-pane fade show active" id="leaveTypes">

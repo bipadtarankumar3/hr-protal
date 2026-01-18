@@ -36,8 +36,8 @@
                             </div>
                           </div>
                           <div class="flex-grow-1">
-                            <h6 class="mb-0">John Doe</h6>
-                            <small class="text-body-secondary">Admin</small>
+                            <h6 class="mb-0">{{ Auth::user()->name ?? 'Guest' }}</h6>
+                            <small class="text-body-secondary">{{ Auth::user()->email ?? 'Not logged in' }}</small>
                           </div>
                         </div>
                       </a>
@@ -71,10 +71,13 @@
                     </li>
                     <li>
                       <div class="d-grid px-4 pt-2 pb-1">
-                        <a class="btn btn-danger d-flex" href="{{ url('login') }}">
-                          <small class="align-middle">Logout</small>
-                          <i class="ri ri-logout-box-r-line ms-2 ri-xs"></i>
-                        </a>
+                        <form action="{{ route('logout') }}" method="POST" class="d-inline">
+                          @csrf
+                          <button type="submit" class="btn btn-danger w-100 d-flex align-items-center justify-content-center">
+                            <small class="align-middle">Logout</small>
+                            <i class="ri ri-logout-box-r-line ms-2 ri-xs"></i>
+                          </button>
+                        </form>
                       </div>
                     </li>
                   </ul>

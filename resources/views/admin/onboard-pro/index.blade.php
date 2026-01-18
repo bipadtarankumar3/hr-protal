@@ -9,53 +9,92 @@
                 <h4 class="fw-semibold mb-1">Onboard Pro</h4>
                 <p class="text-muted mb-0">Candidate onboarding & KYC verification</p>
             </div>
+            {{-- <a href="{{ route('onboard-pros.create') }}" class="btn btn-primary">
+                <i class="ri-add-line me-1"></i>New Onboarding
+            </a> --}}
         </div>
-        <!-- Candidate Info -->
-        <div class="card mb-4 border-0 shadow">
+
+        <!-- Filter Form -->
+        <div class="card shadow-sm mb-4 w-100">
             <div class="card-body">
-                <div class="row g-3 align-items-center">
-                    <div class="col-md-1">
-                        <img src="https://randomuser.me/api/portraits/men/45.jpg" class="rounded-circle border border-2" width="60" height="60" alt="Amit Das">
+                <form method="GET" action="{{ route('onboard-pros.index') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by employee name or department" value="{{ request('search') }}">
                     </div>
                     <div class="col-md-3">
-                        <strong>Candidate Name</strong>
-                        <div>Amit Das</div>
-                    </div>
-                    <div class="col-md-2">
-                        <strong>Candidate ID</strong>
-                        <div>CAND-003</div>
-                    </div>
-                    <div class="col-md-3">
-                        <strong>Job Role</strong>
-                        <div>Backend Developer</div>
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="in-progress" {{ request('status') == 'in-progress' ? 'selected' : '' }}>In Progress</option>
+                            <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
+                        </select>
                     </div>
                     <div class="col-md-3">
-                        <strong>KYC Status</strong>
-                        <div>
-                            <span class="badge bg-warning">Draft</span>
-                        </div>
+                        <label class="form-label">&nbsp;</label>
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="ri-search-line me-1"></i>Filter
+                        </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
-        <!-- Stepper Navigation -->
-        <ul class="nav nav-pills mb-4 justify-content-center" role="tablist">
-            <li class="nav-item">
-                <button class="nav-link active" data-bs-toggle="tab" data-bs-target="#personal">
-                    <i class="ri ri-user-3-line me-1"></i> 1. Personal Info
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#bank">
-                    <i class="ri ri-bank-line me-1"></i> 2. Bank Details
-                </button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link" data-bs-toggle="tab" data-bs-target="#documents">
-                    <i class="ri ri-file-copy-2-line me-1"></i> 3. Documents & KYC
-                </button>
-            </li>
-        </ul>
+
+        <!-- Onboarding Records Table -->
+        <div class="card shadow-sm">
+            <div class="table-responsive">
+                <table class="table table-hover mb-0">
+                    <thead class="table-light">
+                        <tr>
+                            <th>Employee Name</th>
+                            <th>Department</th>
+                            <th>Status</th>
+                            <th>Created Date</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @forelse($onboard_pros as $onboard)
+                            <tr>
+                                <td>{{ $onboard->employee_name }}</td>
+                                <td>{{ $onboard->department }}</td>
+                                <td>
+                                    @if($onboard->status == 'pending')
+                                        <span class="badge bg-warning">Pending</span>
+                                    @elseif($onboard->status == 'in-progress')
+                                        <span class="badge bg-info">In Progress</span>
+                                    @else
+                                        <span class="badge bg-success">Completed</span>
+                                    @endif
+                                </td>
+                                <td>{{ $onboard->created_at->format('d M Y') }}</td>
+                                <td>
+                                    <a href="{{ route('onboard-pros.show', $onboard->id) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="ri-eye-line"></i>
+                                    </a>
+                                    <a href="{{ route('onboard-pros.edit', $onboard->id) }}" class="btn btn-sm btn-outline-secondary">
+                                        <i class="ri-edit-line"></i>
+                                    </a>
+                                </td>
+                            </tr>
+                        @empty
+                            <tr>
+                                <td colspan="5" class="text-center py-4 text-muted">
+                                    <i class="ri-inbox-line me-2"></i>No onboarding records found
+                                </td>
+                            </tr>
+                        @endforelse
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="w-100 mt-3">
+            {{ $onboard_pros->links() }}
+        </div>
+    
         <!-- Stepper Content -->
         <div class="tab-content">
             <!-- Step 1: Personal Info -->

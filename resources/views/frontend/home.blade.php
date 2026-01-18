@@ -9,8 +9,8 @@
         <div class="container">
             <div class="row align-items-center">
                 <div class="col-lg-6">
-                    <h1 class="display-4 fw-bold mb-4">Revolutionizing HR Management</h1>
-                    <p class="lead mb-4">Streamline your HR processes with our comprehensive management system built for modern organizations.</p>
+                    <h1 class="display-4 fw-bold mb-4">{{ $heroContent->title ?? 'Revolutionizing HR Management' }}</h1>
+                    <p class="lead mb-4">{{ $heroContent->description ?? 'Streamline your HR processes with our comprehensive management system built for modern organizations.' }}</p>
                     <div class="d-flex gap-3">
                         <a href="{{ URL::to('careers') }}" class="btn btn-light btn-lg">
                             <i class="fas fa-briefcase me-2"></i>View Openings
@@ -36,83 +36,24 @@
             </div>
             
             <div class="row g-4">
-                <!-- Feature 1 -->
+                @forelse($features as $feature)
+                <!-- Feature Card -->
                 <div class="col-md-4">
                     <div class="card h-100 border-0 shadow-sm card-hover">
                         <div class="card-body text-center p-4">
                             <div class="icon-box mb-4">
-                                <i class="fas fa-user-tie fa-3x text-primary"></i>
+                                <i class="{{ $feature->icon_class }} fa-3x text-primary"></i>
                             </div>
-                            <h4 class="card-title">Talent Hub</h4>
-                            <p class="card-text">Create job postings, track candidates, and manage hiring pipeline seamlessly.</p>
+                            <h4 class="card-title">{{ $feature->feature_name }}</h4>
+                            <p class="card-text">{{ $feature->description }}</p>
                         </div>
                     </div>
                 </div>
-                
-                <!-- Feature 2 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-box mb-4">
-                                <i class="fas fa-handshake fa-3x text-success"></i>
-                            </div>
-                            <h4 class="card-title">Onboard Pro</h4>
-                            <p class="card-text">Automated onboarding with KYC verification and document management.</p>
-                        </div>
-                    </div>
+                @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">No features available yet.</div>
                 </div>
-                
-                <!-- Feature 3 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-box mb-4">
-                                <i class="fas fa-file-invoice-dollar fa-3x text-warning"></i>
-                            </div>
-                            <h4 class="card-title">Pay Pulse</h4>
-                            <p class="card-text">Automated payroll processing with payslip generation and tax compliance.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Feature 4 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-box mb-4">
-                                <i class="fas fa-calendar-alt fa-3x text-info"></i>
-                            </div>
-                            <h4 class="card-title">Leave Track</h4>
-                            <p class="card-text">Manage leave applications, approvals, and attendance synchronization.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Feature 5 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-box mb-4">
-                                <i class="fas fa-project-diagram fa-3x text-danger"></i>
-                            </div>
-                            <h4 class="card-title">Project Desk</h4>
-                            <p class="card-text">Assign and track projects with resource allocation and monitoring.</p>
-                        </div>
-                    </div>
-                </div>
-                
-                <!-- Feature 6 -->
-                <div class="col-md-4">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body text-center p-4">
-                            <div class="icon-box mb-4">
-                                <i class="fas fa-chart-line fa-3x text-purple"></i>
-                            </div>
-                            <h4 class="card-title">Analytics & Reports</h4>
-                            <p class="card-text">Comprehensive dashboards and reports for data-driven decisions.</p>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
         </div>
     </section>

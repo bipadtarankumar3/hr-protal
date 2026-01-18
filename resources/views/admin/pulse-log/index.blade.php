@@ -9,45 +9,95 @@
                 <h4 class="fw-semibold mb-1"><i class="ri ri-time-line me-2 text-primary"></i>Pulse Log</h4>
                 <p class="text-muted mb-0">Weekly attendance & time logging</p>
             </div>
-            <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#newEntryModal">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#newEntryModal" class="btn btn-primary d-flex align-items-center">
                 <i class="ri ri-add-line me-1"></i> New Entry
-            </button>
+            </a>
         </div>
-        <!-- Week Selector -->
+
+        <!-- Filter Form -->
         <div class="card mb-4 border-0 shadow-sm">
             <div class="card-body">
-                <form class="row g-3 align-items-end">
-                    <div class="col-md-3">
-                        <label class="form-label"><i class="ri ri-calendar-event-line me-1"></i>Week</label>
-                        <select class="form-select">
-                            <option>Current Week (01 Sep – 07 Sep)</option>
-                            <option>Previous Week (25 Aug – 31 Aug)</option>
+                <form method="GET" action="{{ route('pulse-logs.index') }}" class="row g-3 align-items-end">
+                    <div class="col-md-4">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by action or description" value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-4">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                         </select>
                     </div>
-                    <div class="col-md-3">
-                        <label class="form-label"><i class="ri ri-folder-3-line me-1"></i>Project Code</label>
-                        <select class="form-select">
-                            <option>RYDZAA-TECH-002</option>
-                            <option>RYDZAA-OPS-001</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label"><i class="ri ri-edit-2-line me-1"></i>Entry Type</label>
-                        <select class="form-select">
-                            <option>Manual</option>
-                            <option>Auto (Leave/Holiday)</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3 d-grid">
-                        <button class="btn btn-outline-primary">
-                            <i class="ri ri-refresh-line"></i> Load Attendance
+                    <div class="col-md-4 d-grid">
+                        <button type="submit" class="btn btn-outline-primary">
+                            <i class="ri ri-search-line"></i> Load Records
                         </button>
                     </div>
                 </form>
             </div>
         </div>
-        <!-- Attendance Grid -->
+
+        <!-- Pulse Log Table -->
         <div class="card border-0 shadow">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0 align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Action</th>
+                                <th>Description</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($pulse_logs as $log)
+                                <tr>
+                                    <td>{{ $log->action }}</td>
+                                    <td>{{ Str::limit($log->description, 50) }}</td>
+                                    <td>
+                                        @if($log->status == 'pending')
+                                            <span class="badge bg-warning">Pending</span>
+                                        @elseif($log->status == 'active')
+                                            <span class="badge bg-success">Active</span>
+                                        @else
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $log->created_at->format('d M Y') }}</td>
+                                    <td>
+                                        <a href="{{ route('pulse-logs.show', $log->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="ri-eye-line"></i>
+                                        </a>
+                                        <a href="{{ route('pulse-logs.edit', $log->id) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="ri-inbox-line me-2"></i>No pulse logs found
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Pagination -->
+        <div class="mt-3">
+            {{ $pulse_logs->links() }}
+        </div>
+   
+
+
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-bordered mb-0 text-center align-middle">

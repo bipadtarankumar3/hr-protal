@@ -13,71 +13,27 @@
 
     <!-- KPI ROW -->
     <div class="row g-3 mb-4">
-
-        <!-- Total Employees -->
+        @forelse($metrics as $metric)
+        <!-- Metric Card -->
         <div class="col-xl-3 col-md-6">
             <div class="card shadow-sm">
                 <div class="card-body d-flex align-items-center">
-                    <div class="avatar bg-label-primary me-3">
-                        <i class="ri ri-group-line ri-22px"></i>
+                    <div class="avatar {{ $metric->badge_class }} me-3">
+                        <i class="{{ $metric->icon_class }} ri-22px"></i>
                     </div>
                     <div>
-                        <h6 class="mb-0">Total Employees</h6>
-                        <h4 class="fw-semibold mb-0">128</h4>
-                        <small class="text-muted">Talent Vault</small>
+                        <h6 class="mb-0">{{ $metric->metric_label }}</h6>
+                        <h4 class="fw-semibold mb-0">{{ $metric->metric_value }}</h4>
+                        <small class="text-muted">{{ $metric->reference_module }}</small>
                     </div>
                 </div>
             </div>
         </div>
-
-        <!-- Open Jobs -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="avatar bg-label-success me-3">
-                        <i class="ri ri-briefcase-line ri-22px"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-0">Open Jobs</h6>
-                        <h4 class="fw-semibold mb-0">7</h4>
-                        <small class="text-muted">Talent Hub</small>
-                    </div>
-                </div>
-            </div>
+        @empty
+        <div class="col-12">
+            <div class="alert alert-info">No metrics configured. <a href="/admin/dashboard-metrics">Configure metrics</a></div>
         </div>
-
-        <!-- Attendance Pending -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="avatar bg-label-warning me-3">
-                        <i class="ri ri-time-line ri-22px"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-0">Attendance Pending</h6>
-                        <h4 class="fw-semibold mb-0">12</h4>
-                        <small class="text-muted">Pulse Log (This Week)</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Active Resignations -->
-        <div class="col-xl-3 col-md-6">
-            <div class="card shadow-sm">
-                <div class="card-body d-flex align-items-center">
-                    <div class="avatar bg-label-danger me-3">
-                        <i class="ri ri-logout-box-line ri-22px"></i>
-                    </div>
-                    <div>
-                        <h6 class="mb-0">Active Resignations</h6>
-                        <h4 class="fw-semibold mb-0">2</h4>
-                        <small class="text-muted">Curtain Call</small>
-                    </div>
-                </div>
-            </div>
-        </div>
-
+        @endforelse
     </div>
 
     <!-- SECOND ROW -->
@@ -88,9 +44,10 @@
             <div class="card h-100">
                 <div class="card-header d-flex justify-content-between">
                     <h6 class="mb-0">Recruitment Pipeline</h6>
-                    <a href="/admin/talent-hub" class="btn btn-sm btn-outline-primary">View</a>
+                    <a href="/admin/job-postings" class="btn btn-sm btn-outline-primary">Manage</a>
                 </div>
                 <div class="card-body">
+                    @forelse($jobPostings as $job)
                     <table class="table table-sm align-middle">
                         <thead class="table-light">
                             <tr>
@@ -102,19 +59,16 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <td>Backend Developer</td>
-                                <td>Tech</td>
-                                <td><span class="badge bg-success">Published</span></td>
-                                <td>34 / 50</td>
-                            </tr>
-                            <tr>
-                                <td>HR Executive</td>
-                                <td>Ops</td>
-                                <td><span class="badge bg-warning">Draft</span></td>
-                                <td>—</td>
+                                <td>{{ $job->job_title }}</td>
+                                <td>{{ $job->department }}</td>
+                                <td><span class="badge bg-success">{{ ucfirst($job->status) }}</span></td>
+                                <td>{{ $job->applicants_count }}</td>
                             </tr>
                         </tbody>
                     </table>
+                    @empty
+                    <p class="text-muted">No job postings available. <a href="/admin/job-postings">Create one</a></p>
+                    @endforelse
                     <small class="text-muted">
                         Auto exhausts when application limit is reached
                     </small>

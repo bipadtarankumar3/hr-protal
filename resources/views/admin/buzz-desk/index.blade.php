@@ -1,25 +1,86 @@
 @extends('admin.layouts.app')
 
 @section('content')
-
-
-
 <div class="container-xxl flex-grow-1 container-p-y">
-    <div class="row gy-6">
+  <div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+      <h4 class="fw-semibold mb-1"><i class="ri ri-megaphone-line me-2"></i>Buzz Desk</h4>
+      <p class="text-muted">Company announcements and updates</p>
+    </div>
+    <a href="#" data-bs-toggle="modal" data-bs-target="#publishAnnouncementModal" class="btn btn-primary">
+      <i class="ri ri-add-line"></i> New Announcement
+    </a>
+  </div>
 
-
-        <!-- Page Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); padding: 20px; border-radius: 10px; color: white;">
-            <div>
-                <h4 class="fw-semibold mb-1">Buzz Desk</h4>
-                <p class="text-muted mb-0" style="color: rgba(255,255,255,0.8);">
-                    Company announcements, holidays & updates
-                </p>
-            </div>
-            <button class="btn btn-light" data-bs-toggle="modal" data-bs-target="#publishAnnouncementModal">
-                <i class="ri ri-add-line"></i> Publish Announcement
-            </button>
+  <!-- Filter Section -->
+  <div class="card mb-4 bg-light">
+    <div class="card-body">
+      <form method="GET" action="{{ route('buzz-desks.index') }}" class="row g-3">
+        <div class="col-md-4">
+          <label class="form-label">Search <small class="text-muted">(Subject, Description)</small></label>
+          <input type="text" name="search" class="form-control" placeholder="Search..." value="{{ request('search') }}">
         </div>
+        <div class="col-md-3">
+          <label class="form-label">Status</label>
+          <select name="status" class="form-select">
+            <option value="">All</option>
+            <option value="published" {{ request('status') === 'published' ? 'selected' : '' }}>Published</option>
+            <option value="draft" {{ request('status') === 'draft' ? 'selected' : '' }}>Draft</option>
+          </select>
+        </div>
+        <div class="col-md-3 d-flex align-items-end gap-2">
+          <button type="submit" class="btn btn-primary w-100">
+            <i class="ri-filter-3-line"></i> Apply Filters
+          </button>
+          <a href="{{ route('buzz-desks.index') }}" class="btn btn-outline-secondary">
+            <i class="ri-refresh-line"></i> Reset
+          </a>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body p-0">
+      <div class="table-responsive">
+        <table class="table table-hover mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>Subject</th>
+              <th>Description</th>
+              <th>Status</th>
+              <th>Created</th>
+              <th class="text-end">Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            @forelse($buzz_desks as $buzz)
+            <tr>
+              <td><strong>{{ $buzz->subject ?? 'N/A' }}</strong></td>
+              <td>{{ Str::limit($buzz->description ?? 'N/A', 50) }}</td>
+              <td><span class="badge bg-{{ ['published' => 'success', 'draft' => 'secondary'][$buzz->status] ?? 'secondary' }}">{{ ucfirst($buzz->status ?? 'N/A') }}</span></td>
+              <td>{{ $buzz->created_at ? $buzz->created_at->format('d M Y') : 'N/A' }}</td>
+              <td class="text-end">
+                <a href="{{ route('buzz-desks.show', $buzz->id) }}" class="btn btn-sm btn-outline-primary" title="View"><i class="ri-eye-line"></i></a>
+                <a href="{{ route('buzz-desks.edit', $buzz->id) }}" class="btn btn-sm btn-outline-secondary" title="Edit"><i class="ri-edit-line"></i></a>
+              </td>
+            </tr>
+            @empty
+            <tr>
+              <td colspan="5" class="text-center py-4 text-muted">No announcements found</td>
+            </tr>
+            @endforelse
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pagination -->
+  <div class="mt-3">
+    {{ $buzz_desks->links() }}
+  </div>
+
 
         <div class="card mb-4">
     <div class="card-body">

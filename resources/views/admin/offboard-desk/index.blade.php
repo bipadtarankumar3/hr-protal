@@ -14,6 +14,9 @@
                     Manage resignations, clearances & final settlements
                 </p>
             </div>
+            <a href="{{ route('offboard-desks.create') }}" class="btn btn-light">
+                <i class="ri-add-line me-1"></i>New Offboard
+            </a>
         </div>
 
 <!-- Resignation Queue Filters -->
@@ -22,42 +25,28 @@
         <h6 class="mb-0"><i class="ri-filter-3-line me-2"></i>Filters</h6>
     </div>
     <div class="card-body">
-        <div class="row g-3">
-
-            <div class="col-md-3">
-                <label class="form-label">Project</label>
-                <select class="form-select">
-                    <option>All</option>
-                    <option>RYDZAA-TECH-002</option>
-                    <option>RYDZAA-OPS-001</option>
-                </select>
+        <form method="GET" action="{{ route('offboard-desks.index') }}" class="row g-3">
+            <div class="col-md-4">
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Search by employee name" value="{{ request('search') }}">
             </div>
 
-            <div class="col-md-3">
-                <label class="form-label">Department</label>
-                <select class="form-select">
-                    <option>All</option>
-                    <option>Tech</option>
-                    <option>Operations</option>
-                </select>
-            </div>
-
-            <div class="col-md-3">
+            <div class="col-md-4">
                 <label class="form-label">Status</label>
-                <select class="form-select">
-                    <option>Pending</option>
-                    <option>Approved</option>
-                    <option>Completed</option>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                    <option value="completed" {{ request('status') == 'completed' ? 'selected' : '' }}>Completed</option>
                 </select>
             </div>
 
-            <div class="col-md-3 d-flex align-items-end">
-                <button class="btn btn-outline-primary w-100">
+            <div class="col-md-4 d-flex align-items-end">
+                <button type="submit" class="btn btn-outline-primary w-100">
                     <i class="ri ri-filter-3-line me-1"></i> Apply Filters
                 </button>
             </div>
-
-        </div>
+        </form>
     </div>
 </div>
 
@@ -71,57 +60,55 @@
             <table class="table table-hover mb-0 align-middle">
                 <thead class="table-light">
                     <tr>
-                        <th>Employee</th>
-                        <th>Department</th>
-                        <th>Proposed LWD</th>
+                        <th>Employee Name</th>
+                        <th>Reason</th>
                         <th>Status</th>
+                        <th>Created Date</th>
                         <th class="text-end">Actions</th>
                     </tr>
                 </thead>
                 <tbody>
-
-                    <tr>
-                        <td>
-                            <div class="d-flex align-items-center">
-                                <img src="https://via.placeholder.com/40" alt="Avatar" class="rounded-circle me-3" style="width: 40px; height: 40px;">
-                                <div>
-                                    <strong>Amit Das</strong><br>
-                                    <small class="text-muted">EMP-001</small>
-                                </div>
-                            </div>
-                        </td>
-                        <td>Tech</td>
-                        <td>30 Sep 2025</td>
-                        <td>
-                            <span class="badge bg-warning">Pending Approval</span>
-                        </td>
-                        <td class="text-end">
-                            <div class="btn-group" role="group">
-                                <button class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#approveModal">
-                                    <i class="ri-check-line"></i> Approve
-                                </button>
-                                <button class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#rejectModal">
-                                    <i class="ri-close-line"></i> Reject
-                                </button>
-                                <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#detailsModal">
-                                    <i class="ri-eye-line"></i> View Details
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-
+                    @forelse($off_board_desks as $offboard)
+                        <tr>
+                            <td>{{ $offboard->employee_name }}</td>
+                            <td>{{ Str::limit($offboard->reason, 40) }}</td>
+                            <td>
+                                @if($offboard->status == 'pending')
+                                    <span class="badge bg-warning">Pending Approval</span>
+                                @elseif($offboard->status == 'approved')
+                                    <span class="badge bg-info">Approved</span>
+                                @else
+                                    <span class="badge bg-success">Completed</span>
+                                @endif
+                            </td>
+                            <td>{{ $offboard->created_at->format('d M Y') }}</td>
+                            <td class="text-end">
+                                <a href="{{ route('offboard-desks.show', $offboard->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="ri-eye-line"></i> View
+                                </a>
+                                <a href="{{ route('offboard-desks.edit', $offboard->id) }}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="ri-edit-line"></i> Edit
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                <i class="ri-inbox-line me-2"></i>No offboard requests found
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
         </div>
     </div>
 </div>
 
-<!-- Exit Checklist Panel -->
-<div class="card mb-4 shadow-sm">
-    <div class="card-header bg-light">
-        <h6 class="mb-0"><i class="ri-clipboard-check-line me-2"></i>Exit Checklist</h6>
-    </div>
-    <div class="card-body">
+<!-- Pagination -->
+<div class="w-100 mt-3">
+    {{ $off_board_desks->links() }}
+</div>
+
 
         <div class="row g-3 mb-4">
             <div class="col-md-6">
@@ -270,8 +257,6 @@
         </div>
 
     </div>
-</div>
-</div>
 </div>
 
 <!-- Notifications -->

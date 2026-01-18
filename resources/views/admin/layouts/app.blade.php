@@ -161,6 +161,9 @@
 
     <script src="{{ asset('public/admin-assets/js/main.js')}}"></script>
 
+    <!-- Dynamic Modal JS -->
+    <script src="{{ asset('admin-assets/js/dynamic-modal.js')}}"></script>
+
     <!-- Page JS -->
 
     <!-- Place this tag before closing body tag for github widget button. -->

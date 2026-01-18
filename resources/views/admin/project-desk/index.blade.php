@@ -9,138 +9,89 @@
                 <h4 class="fw-semibold mb-1"><i class="ri ri-projector-line me-2 text-primary"></i>Project Desk</h4>
                 <p class="text-muted mb-0">Manage project codes for attendance, payroll, and team mapping</p>
             </div>
-        </div>
-
-        <!-- Sync Logic -->
-        <div class="alert alert-info mb-4">
-            <h6><i class="ri ri-sync-line me-1"></i>Sync Logic:</h6>
-            <ul class="mb-0">
-                <li><strong>Pulse Log</strong> - Uses project code for attendance tagging</li>
-                <li><strong>Pay Pulse</strong> - Uses project code for payroll mapping</li>
-                <li><strong>Team Map</strong> - Uses project code for access control and manager mapping</li>
-            </ul>
-        </div>
-
-        <!-- HR Panel Content -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <div>
-                <h6 class="mb-0"><i class="ri ri-settings-3-line me-1"></i>Project Code Management</h6>
-            </div>
-            <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#createProjectModal">
-                <i class="ri ri-add-line"></i> Add Project
-            </button>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#createProjectModal" class="btn btn-primary">
+                <i class="ri-add-line me-1"></i>Add Project
+            </a>
         </div>
 
         <!-- Filters -->
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-sm">
             <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label">Department</label>
-                        <select class="form-select">
-                            <option>All</option>
-                            <option>Tech</option>
-                            <option>Operations</option>
-                            <option>Support</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Project Manager</label>
-                        <select class="form-select">
-                            <option>All</option>
-                            <option>Rohit Sharma</option>
-                            <option>Anjali Sen</option>
-                        </select>
+                <form method="GET" action="{{ route('project-desks.index') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by project name or description" value="{{ request('search') }}">
                     </div>
                     <div class="col-md-3">
                         <label class="form-label">Status</label>
-                        <select class="form-select">
-                            <option>All</option>
-                            <option>Active</option>
-                            <option>Inactive</option>
+                        <select name="status" class="form-select">
+                            <option value="">All</option>
+                            <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                            <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                         </select>
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
-                        <button class="btn btn-outline-primary w-100">
+                        <button type="submit" class="btn btn-outline-primary w-100">
                             <i class="ri ri-filter-3-line"></i> Apply Filters
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
         <!-- Project List -->
-        <div class="card">
-            <div class="card-header bg-light d-flex justify-content-between align-items-center">
+        <div class="card shadow-sm">
+            <div class="card-header bg-light">
                 <h6 class="mb-0">Project Codes List</h6>
-                <button class="btn btn-success btn-sm">
-                    <i class="ri ri-download-line"></i> Export Registry
-                </button>
             </div>
             <div class="card-body p-0">
                 <div class="table-responsive">
-                    <table class="table table-hover align-middle mb-0" id="projectsTable">
+                    <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Project Code</th>
                                 <th>Project Name</th>
-                                <th>Department</th>
-                                <th>Team Code</th>
-                                <th>Project Manager</th>
+                                <th>Description</th>
                                 <th>Status</th>
-                                <th>Sync Status</th>
+                                <th>Created Date</th>
                                 <th class="text-end">Actions</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>RYDZAA-TECH-002</td>
-                                <td>Core Platform</td>
-                                <td>Tech</td>
-                                <td>TECH</td>
-                                <td>Rohit Sharma</td>
-                                <td><span class="badge bg-success">Active</span></td>
-                                <td><span class="badge bg-info">Payroll & Attendance</span></td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary edit-btn" data-id="1">Edit</button>
-                                    <button class="btn btn-sm btn-outline-danger delete-btn" data-id="1">Delete</button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>RYDZAA-OPS-001</td>
-                                <td>Operations Support</td>
-                                <td>Operations</td>
-                                <td>OPS</td>
-                                <td>Anjali Sen</td>
-                                <td><span class="badge bg-secondary">Inactive</span></td>
-                                <td><span class="badge bg-warning">Not Synced</span></td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary edit-btn" data-id="2">Edit</button>
-                                    <button class="btn btn-sm btn-outline-danger delete-btn" data-id="2">Delete</button>
-                                </td>
-                            </tr>
+                            @forelse($project_desks as $project)
+                                <tr>
+                                    <td>{{ $project->project_name }}</td>
+                                    <td>{{ Str::limit($project->description, 50) }}</td>
+                                    <td>
+                                        @if($project->status == 'active')
+                                            <span class="badge bg-success">Active</span>
+                                        @else
+                                            <span class="badge bg-secondary">Inactive</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $project->created_at->format('d M Y') }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ route('project-desks.show', $project->id) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <a href="{{ route('project-desks.edit', $project->id) }}" class="btn btn-sm btn-outline-secondary">View</a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="ri-inbox-line me-2"></i>No projects found
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Access Control -->
-        <div class="alert alert-secondary mt-4">
-            <h6><i class="ri ri-shield-user-line me-1"></i>Access Control:</h6>
-            <ul class="mb-0">
-                <li><strong>HR</strong> - Full (Create/ Edit/ Delete)</li>
-                <li><strong>Finance HR</strong> - Read Only: View, Filter, Export</li>
-                <li><strong>Project Manager</strong> - No Access (View via Team Map)</li>
-            </ul>
+        <!-- Pagination -->
+        <div class="mt-3">
+            {{ $project_desks->links() }}
         </div>
-
-        <!-- Auditor View Note -->
-        <div class="alert alert-info">
-            <strong>Note:</strong> Finance HR (Auditor View) for detailed employee mapping and attendance summaries is available in the <strong>Team Map</strong> page.
-        </div>
-    </div>
-</div>
+    
 
 
 

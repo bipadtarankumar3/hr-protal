@@ -13,108 +13,88 @@
             Internal policies, SOPs & training resources
         </p>
     </div>
-    <button class="btn btn-primary">
+    <a href="{{ route('learn-zones.create') }}" class="btn btn-primary">
         <i class="ri ri-upload-line"></i> Upload Document
-    </button>
+    </a>
 </div>
 
 <!-- Filters -->
 <div class="card mb-4">
     <div class="card-body">
-        <div class="row g-3">
-
+        <form method="GET" action="{{ route('learn-zones.index') }}" class="row g-3">
             <div class="col-md-4">
-                <label class="form-label">Category</label>
-                <select class="form-select">
-                    <option>All</option>
-                    <option>Policy</option>
-                    <option>SOP</option>
-                    <option>Training</option>
-                    <option>Compliance</option>
-                </select>
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Search by course name" value="{{ request('search') }}">
             </div>
 
             <div class="col-md-4">
-                <label class="form-label">Department</label>
-                <select class="form-select">
-                    <option>All</option>
-                    <option>HR</option>
-                    <option>Tech</option>
-                    <option>Operations</option>
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All</option>
+                    <option value="active" {{ request('status') == 'active' ? 'selected' : '' }}>Active</option>
+                    <option value="inactive" {{ request('status') == 'inactive' ? 'selected' : '' }}>Inactive</option>
                 </select>
             </div>
 
             <div class="col-md-4 d-flex align-items-end">
-                <button class="btn btn-outline-primary w-100">
+                <button type="submit" class="btn btn-outline-primary w-100">
                     <i class="ri ri-search-line"></i> Search
                 </button>
             </div>
-
-        </div>
+        </form>
     </div>
 </div>
 
-<!-- Knowledge Cards -->
-<div class="row g-3">
-
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <span class="badge bg-primary mb-2">Policy</span>
-                <h6 class="fw-semibold">Employee Code of Conduct</h6>
-                <p class="text-muted small">
-                    Guidelines on professional behavior and ethics.
-                </p>
-            </div>
-            <div class="card-footer bg-transparent">
-                <a href="#" class="btn btn-sm btn-outline-primary w-100">
-                    View Document
-                </a>
-            </div>
-        </div>
+<!-- Knowledge Table -->
+<div class="card shadow-sm">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="table-light">
+                <tr>
+                    <th>Course Name</th>
+                    <th>Description</th>
+                    <th>Status</th>
+                    <th>Created Date</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                @forelse($learn_zones as $course)
+                    <tr>
+                        <td>{{ $course->course_name }}</td>
+                        <td>{{ Str::limit($course->description, 50) }}</td>
+                        <td>
+                            @if($course->status == 'active')
+                                <span class="badge bg-success">Active</span>
+                            @else
+                                <span class="badge bg-secondary">Inactive</span>
+                            @endif
+                        </td>
+                        <td>{{ $course->created_at->format('d M Y') }}</td>
+                        <td>
+                            <a href="{{ route('learn-zones.show', $course->id) }}" class="btn btn-sm btn-outline-primary">
+                                <i class="ri-eye-line"></i>
+                            </a>
+                            <a href="{{ route('learn-zones.edit', $course->id) }}" class="btn btn-sm btn-outline-secondary">
+                                <i class="ri-edit-line"></i>
+                            </a>
+                        </td>
+                    </tr>
+                @empty
+                    <tr>
+                        <td colspan="5" class="text-center py-4 text-muted">
+                            <i class="ri-inbox-line me-2"></i>No courses found
+                        </td>
+                    </tr>
+                @endforelse
+            </tbody>
+        </table>
     </div>
-
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <span class="badge bg-success mb-2">SOP</span>
-                <h6 class="fw-semibold">Leave Application SOP</h6>
-                <p class="text-muted small">
-                    Step-by-step guide for applying and approving leaves.
-                </p>
-            </div>
-            <div class="card-footer bg-transparent">
-                <a href="#" class="btn btn-sm btn-outline-primary w-100">
-                    View Document
-                </a>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-4">
-        <div class="card shadow-sm h-100">
-            <div class="card-body">
-                <span class="badge bg-warning mb-2">Training</span>
-                <h6 class="fw-semibold">Information Security Awareness</h6>
-                <p class="text-muted small">
-                    Mandatory security training for all employees.
-                </p>
-            </div>
-            <div class="card-footer bg-transparent">
-                <a href="#" class="btn btn-sm btn-outline-primary w-100">
-                    Start Training
-                </a>
-            </div>
-        </div>
-    </div>
-
 </div>
 
-<!-- Notes -->
-<div class="alert alert-info mt-4">
-    <i class="ri ri-information-line"></i>
-    Learn Zone materials are version-controlled and accessible
-    based on department and role.
+<!-- Pagination -->
+<div class="mt-3">
+    {{ $learn_zones->links() }}
 </div>
 </div>
 </div>

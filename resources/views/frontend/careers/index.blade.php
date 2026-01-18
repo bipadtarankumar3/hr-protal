@@ -67,125 +67,37 @@
 
             <!-- Job Listings -->
             <div class="row g-4" id="jobListings">
-                <!-- Job Card 1 -->
-                <div class="col-md-6 col-lg-4 job-card" data-department="Tech" data-location="Durgapur" data-experience="Experienced">
+                @forelse($jobs as $job)
+                <!-- Job Card -->
+                <div class="col-md-6 col-lg-4 job-card" data-department="{{ $job->department }}" data-location="{{ $job->location }}" data-experience="">
                     <div class="card h-100 border-0 shadow-sm card-hover">
                         <div class="card-body">
                             <div class="d-flex justify-content-between align-items-start mb-3">
-                                <span class="badge bg-primary">Technology</span>
-                                <span class="badge bg-secondary">Durgapur</span>
+                                <span class="badge bg-primary">{{ $job->department }}</span>
+                                <span class="badge bg-secondary">{{ $job->location ?? 'Various' }}</span>
                             </div>
-                            <h4 class="card-title">Senior Backend Developer</h4>
-                            <p class="card-text text-muted mb-3">We're looking for an experienced backend developer to join our tech team...</p>
+                            <h4 class="card-title">{{ $job->job_title }}</h4>
+                            <p class="card-text text-muted mb-3">{{ Str::limit($job->description, 80) ?? 'Join our team to make an impact...' }}</p>
                             <div class="job-details mb-3">
-                                <p class="mb-1"><i class="fas fa-briefcase me-2"></i>5+ Years Experience</p>
-                                <p class="mb-0"><i class="fas fa-code me-2"></i>Node.js, MongoDB, AWS</p>
+                                <p class="mb-1"><i class="fas fa-briefcase me-2"></i>{{ $job->job_type ?? 'Full-time' }}</p>
+                                <p class="mb-0"><i class="fas fa-users me-2"></i>{{ $job->applicants_count }} applicants</p>
                             </div>
-                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
+                            <a href="{{ URL::to('careers/apply/' . $job->id) }}" class="btn btn-primary w-100">
                                 Apply Now
                             </a>
                         </div>
                         <div class="card-footer bg-transparent border-top-0">
-                            <small class="text-muted"><i class="fas fa-clock me-1"></i>Posted 2 days ago</small>
+                            <small class="text-muted"><i class="fas fa-clock me-1"></i>{{ $job->created_at->diffForHumans() }}</small>
                         </div>
                     </div>
                 </div>
-
-                <!-- Job Card 2 -->
-                <div class="col-md-6 col-lg-4 job-card" data-department="Ops" data-location="Kolkata" data-experience="Fresher">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <span class="badge bg-success">Operations</span>
-                                <span class="badge bg-secondary">Kolkata</span>
-                            </div>
-                            <h4 class="card-title">Operations Executive</h4>
-                            <p class="card-text text-muted mb-3">Join our operations team to help streamline business processes...</p>
-                            <div class="job-details mb-3">
-                                <p class="mb-1"><i class="fas fa-briefcase me-2"></i>Fresher</p>
-                                <p class="mb-0"><i class="fas fa-tasks me-2"></i>Process Management, Analytics</p>
-                            </div>
-                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
-                                Apply Now
-                            </a>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0">
-                            <small class="text-muted"><i class="fas fa-clock me-1"></i>Posted 1 week ago</small>
-                        </div>
+                @empty
+                <div class="col-12">
+                    <div class="alert alert-info text-center">
+                        No job openings available at the moment. Please check back soon!
                     </div>
                 </div>
-
-                <!-- Job Card 3 -->
-                <div class="col-md-6 col-lg-4 job-card" data-department="Tech" data-location="Remote" data-experience="Experienced">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <span class="badge bg-primary">Technology</span>
-                                <span class="badge bg-secondary">Remote</span>
-                            </div>
-                            <h4 class="card-title">Frontend Developer</h4>
-                            <p class="card-text text-muted mb-3">Looking for a frontend developer with expertise in React and modern frameworks...</p>
-                            <div class="job-details mb-3">
-                                <p class="mb-1"><i class="fas fa-briefcase me-2"></i>3+ Years Experience</p>
-                                <p class="mb-0"><i class="fas fa-code me-2"></i>React.js, JavaScript, CSS</p>
-                            </div>
-                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
-                                Apply Now
-                            </a>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0">
-                            <small class="text-muted"><i class="fas fa-clock me-1"></i>Posted 3 days ago</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Job Card 4 -->
-                <div class="col-md-6 col-lg-4 job-card" data-department="Support" data-location="Durgapur" data-experience="Fresher">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <span class="badge bg-info">Support</span>
-                                <span class="badge bg-secondary">Durgapur</span>
-                            </div>
-                            <h4 class="card-title">Customer Support Executive</h4>
-                            <p class="card-text text-muted mb-3">Provide excellent customer service and support to our clients...</p>
-                            <div class="job-details mb-3">
-                                <p class="mb-1"><i class="fas fa-briefcase me-2"></i>Fresher</p>
-                                <p class="mb-0"><i class="fas fa-headset me-2"></i>Communication, Problem Solving</p>
-                            </div>
-                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
-                                Apply Now
-                            </a>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0">
-                            <small class="text-muted"><i class="fas fa-clock me-1"></i>Posted 5 days ago</small>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- Job Card 5 -->
-                <div class="col-md-6 col-lg-4 job-card" data-department="Finance" data-location="Kolkata" data-experience="Experienced">
-                    <div class="card h-100 border-0 shadow-sm card-hover">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-start mb-3">
-                                <span class="badge bg-warning">Finance</span>
-                                <span class="badge bg-secondary">Kolkata</span>
-                            </div>
-                            <h4 class="card-title">Finance Analyst</h4>
-                            <p class="card-text text-muted mb-3">Analyze financial data and provide insights for business decisions...</p>
-                            <div class="job-details mb-3">
-                                <p class="mb-1"><i class="fas fa-briefcase me-2"></i>4+ Years Experience</p>
-                                <p class="mb-0"><i class="fas fa-chart-line me-2"></i>Financial Analysis, Excel</p>
-                            </div>
-                            <a href="{{ URL::to('careers/apply/1') }}" class="btn btn-primary w-100">
-                                Apply Now
-                            </a>
-                        </div>
-                        <div class="card-footer bg-transparent border-top-0">
-                            <small class="text-muted"><i class="fas fa-clock me-1"></i>Posted 1 day ago</small>
-                        </div>
-                    </div>
-                </div>
+                @endforelse
             </div>
 
             <!-- No Results Message -->

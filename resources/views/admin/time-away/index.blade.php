@@ -9,60 +9,95 @@
                 <h4 class="fw-semibold mb-1"><i class="ri ri-flight-takeoff-line me-2 text-primary"></i>Time Away</h4>
                 <p class="text-muted mb-0">Apply for absence (CL, Sick, Earned, etc.)</p>
             </div>
-            <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#applyLeaveModal">
+            <a href="#" data-bs-toggle="modal" data-bs-target="#applyLeaveModal" class="btn btn-primary d-flex align-items-center">
                 <i class="ri ri-add-line me-1"></i> New Absence
-            </button>
+            </a>
         </div>
 
-        <!-- Auto-Sync Information -->
-        <div class="alert alert-info mb-4">
-            <h6><i class="ri ri-sync-line me-1"></i> Auto-Sync Features:</h6>
-            <ol class="mb-0">
-                <li>Auto-syncs with PulseLog (attendance)</li>
-                <li>Updates leave balance in LeaveTrack</li>
-                <li>Finance HR sees impact in PayPulse</li>
-            </ol>
+        <!-- Filter Form -->
+        <div class="card mb-4 shadow-sm">
+            <div class="card-body">
+                <form method="GET" action="{{ route('time-aways.index') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by reason or notes" value="{{ request('search') }}">
+                    </div>
+                    <div class="col-md-3">
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                            <option value="approved" {{ request('status') == 'approved' ? 'selected' : '' }}>Approved</option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 d-flex align-items-end">
+                        <button type="submit" class="btn btn-outline-primary w-100">
+                            <i class="ri ri-search-line me-1"></i>Filter
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
 
-        <!-- Leave Balance Summary -->
-        <div class="row g-3 mb-4">
-            <div class="col-md-2">
-                <div class="card text-center shadow-sm border-0 bg-gradient-primary text-white">
-                    <div class="card-body">
-                        <h6><i class="ri ri-sun-line"></i> Casual Leave</h6>
-                        <h4 class="fw-semibold mb-0">4</h4>
-                        <small class="text-white-50">Remaining</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card text-center shadow-sm border-0 bg-gradient-info text-white">
-                    <div class="card-body">
-                        <h6><i class="ri ri-hospital-line"></i> Sick Leave</h6>
-                        <h4 class="fw-semibold mb-0">6</h4>
-                        <small class="text-white-50">Remaining</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card text-center shadow-sm border-0 bg-gradient-success text-white">
-                    <div class="card-body">
-                        <h6><i class="ri ri-award-line"></i> Earned Leave</h6>
-                        <h4 class="fw-semibold mb-0">10</h4>
-                        <small class="text-white-50">Remaining</small>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-2">
-                <div class="card text-center shadow-sm border-0 bg-gradient-danger text-white">
-                    <div class="card-body">
-                        <h6><i class="ri ri-money-dollar-circle-line"></i> LOP</h6>
-                        <h4 class="fw-semibold mb-0">—</h4>
-                        <small class="text-white-50">Unpaid</small>
-                    </div>
+        <!-- Time Away Records Table -->
+        <div class="card shadow-sm">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Reason</th>
+                                <th>Notes</th>
+                                <th>Status</th>
+                                <th>Created Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @forelse($time_aways as $timeaway)
+                                <tr>
+                                    <td>{{ $timeaway->reason }}</td>
+                                    <td>{{ Str::limit($timeaway->notes, 40) }}</td>
+                                    <td>
+                                        @if($timeaway->status == 'pending')
+                                            <span class="badge bg-warning">Pending</span>
+                                        @elseif($timeaway->status == 'approved')
+                                            <span class="badge bg-success">Approved</span>
+                                        @else
+                                            <span class="badge bg-danger">Rejected</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $timeaway->created_at->format('d M Y') }}</td>
+                                    <td>
+                                        <a href="{{ route('time-aways.show', $timeaway->id) }}" class="btn btn-sm btn-outline-primary">
+                                            <i class="ri-eye-line"></i>
+                                        </a>
+                                        <a href="{{ route('time-aways.edit', $timeaway->id) }}" class="btn btn-sm btn-outline-secondary">
+                                            <i class="ri-edit-line"></i>
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="ri-inbox-line me-2"></i>No time away records found
+                                    </td>
+                                </tr>
+                            @endforelse
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
+
+        <!-- Pagination -->
+        <div class="mt-3">
+            {{ $time_aways->links() }}
+        </div>
+    
+
+
         <!-- Absence Application Form -->
         {{-- <form>
             <div class="card mb-4 border-0 shadow-sm">

@@ -14,143 +14,86 @@
             Monthly payroll processing & payslip generation
         </p>
     </div>
+    {{-- <a href="{{ route('pay-pulses.create') }}" class="btn btn-primary">
+        <i class="ri-add-line me-1"></i>New Payroll
+    </a> --}}
 </div>
 
-<!-- Payroll Controls -->
-<div class="card mb-4">
+<!-- Filter Form -->
+<div class="card mb-4 shadow-sm">
     <div class="card-body">
-        <div class="row g-3 align-items-end">
+        <form method="GET" action="{{ route('pay-pulses.index') }}" class="row g-3">
+            <div class="col-md-6">
+                <label class="form-label">Search</label>
+                <input type="text" name="search" class="form-control" placeholder="Search by employee ID or payroll month" value="{{ request('search') }}">
+            </div>
 
             <div class="col-md-3">
-                <label class="form-label">Payroll Month</label>
-                <select class="form-select">
-                    <option>September 2025</option>
-                    <option>August 2025</option>
+                <label class="form-label">Status</label>
+                <select name="status" class="form-select">
+                    <option value="">All Status</option>
+                    <option value="pending" {{ request('status') == 'pending' ? 'selected' : '' }}>Pending</option>
+                    <option value="processed" {{ request('status') == 'processed' ? 'selected' : '' }}>Processed</option>
+                    <option value="paid" {{ request('status') == 'paid' ? 'selected' : '' }}>Paid</option>
                 </select>
             </div>
 
             <div class="col-md-3">
-                <label class="form-label">Cut-off Date</label>
-                <input type="text" class="form-control" value="25 Sep 2025" disabled>
-            </div>
-
-            <div class="col-md-3">
-                <label class="form-label">Payroll Status</label>
-                <span class="badge bg-warning d-block text-center p-2">
-                    Pending Processing
-                </span>
-            </div>
-
-            <div class="col-md-3">
-                <button class="btn btn-primary w-100">
-                    <i class="ri ri-play-circle-line"></i> Run Payroll
+                <label class="form-label">&nbsp;</label>
+                <button type="submit" class="btn btn-outline-primary w-100">
+                    <i class="ri-search-line me-1"></i>Filter
                 </button>
             </div>
-
-        </div>
+        </form>
     </div>
-</div>
-
-<!-- Payroll Summary -->
-<div class="row g-3 mb-4">
-
-    <div class="col-md-3">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-                <h6>Total Employees</h6>
-                <h4 class="fw-semibold mb-0">45</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-                <h6>Paid Leaves</h6>
-                <h4 class="fw-semibold mb-0">120</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-                <h6>LOP Days</h6>
-                <h4 class="fw-semibold mb-0">8</h4>
-            </div>
-        </div>
-    </div>
-
-    <div class="col-md-3">
-        <div class="card text-center shadow-sm">
-            <div class="card-body">
-                <h6>Total Payroll</h6>
-                <h4 class="fw-semibold mb-0">₹ 28,50,000</h4>
-            </div>
-        </div>
-    </div>
-
 </div>
 
 <!-- Employee Payroll Table -->
-<div class="card">
+<div class="card shadow-sm">
     <div class="card-body p-0">
         <div class="table-responsive">
             <table class="table table-hover mb-0 align-middle">
                 <thead class="table-light">
                     <tr>
                         <th>Employee ID</th>
-                        <th>Name</th>
-                        <th>Project Code</th>
-                        <th>Working Days</th>
-                        <th>LOP</th>
-                        <th>Net Pay</th>
-                        <th>Payslip</th>
+                        <th>Payroll Month</th>
+                        <th>Status</th>
+                        <th>Created Date</th>
+                        <th>Actions</th>
                     </tr>
                 </thead>
                 <tbody>
 
-                    <tr>
-                        <td>EMP-001</td>
-                        <td>Amit Das</td>
-                        <td>RYDZAA-TECH-002</td>
-                        <td>22</td>
-                        <td>0</td>
-                        <td>₹ 55,000</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                Generate
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>EMP-002</td>
-                        <td>Neha Verma</td>
-                        <td>RYDZAA-OPS-001</td>
-                        <td>20</td>
-                        <td>2</td>
-                        <td>₹ 42,000</td>
-                        <td>
-                            <button class="btn btn-sm btn-outline-primary">
-                                Generate
-                            </button>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>EMP-003</td>
-                        <td>Rohit Sharma</td>
-                        <td>RYDZAA-TECH-002</td>
-                        <td>22</td>
-                        <td>0</td>
-                        <td>₹ 85,000</td>
-                        <td>
-                            <span class="badge bg-success">
-                                Generated
-                            </span>
-                        </td>
-                    </tr>
+                    @forelse($payPulses as $payroll)
+                        <tr>
+                            <td>{{ $payroll->employee_id }}</td>
+                            <td>{{ $payroll->payroll_month }}</td>
+                            <td>
+                                @if($payroll->status == 'pending')
+                                    <span class="badge bg-warning">Pending</span>
+                                @elseif($payroll->status == 'processed')
+                                    <span class="badge bg-info">Processed</span>
+                                @else
+                                    <span class="badge bg-success">Paid</span>
+                                @endif
+                            </td>
+                            <td>{{ $payroll->created_at->format('d M Y') }}</td>
+                            <td>
+                                <a href="{{ route('pay-pulses.show', $payroll->id) }}" class="btn btn-sm btn-outline-primary">
+                                    <i class="ri-eye-line"></i>
+                                </a>
+                                <a href="{{ route('pay-pulses.edit', $payroll->id) }}" class="btn btn-sm btn-outline-secondary">
+                                    <i class="ri-edit-line"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="5" class="text-center py-4 text-muted">
+                                <i class="ri-inbox-line me-2"></i>No payroll records found
+                            </td>
+                        </tr>
+                    @endforelse
 
                 </tbody>
             </table>
@@ -158,12 +101,9 @@
     </div>
 </div>
 
-<!-- Payroll Notes -->
-<div class="alert alert-info mt-4">
-    <i class="ri ri-information-line"></i>
-    Payroll is calculated based on Pulse Log attendance up to
-    <strong>25th of the month</strong>. Payslips are generated on the
-    <strong>last working day</strong>.
+<!-- Pagination -->
+<div class="mt-3">
+    {{ $payPulses->links() }}
 </div>
 </div>
 </div>

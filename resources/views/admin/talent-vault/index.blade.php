@@ -7,150 +7,93 @@
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h4 class="fw-semibold mb-1"><i class="ri ri-folder-user-line me-2 text-primary"></i>Talent Vault</h4>
-                <p class="text-muted mb-0">HR repository for employee master data & verification</p>
+                <p class="text-muted mb-0">HR repository for candidate data & verification</p>
             </div>
-            <button class="btn btn-primary d-flex align-items-center" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
-                <i class="ri ri-add-line me-1"></i> Add Employee
-            </button>
-        </div>
-
-        <!-- Purpose -->
-        <div class="alert alert-info mb-4">
-            <h6><i class="ri ri-information-line me-1"></i>Purpose:</h6>
-            <ul class="mb-0">
-                <li>Acts as the HR repository for all employee master data.</li>
-                <li>Stores third party verification result</li>
-                <li>Syncs with other portals (Eg - Leave Track, Pay Pulse) but operates independently.</li>
-                <li>Used by HR, Legal, and Finance for compliance and audit trails</li>
-            </ul>
+            <a href="#" data-bs-toggle="modal" data-bs-target="#addEmployeeModal" class="btn btn-primary d-flex align-items-center">
+                <i class="ri ri-add-line me-1"></i> Add Candidate
+            </a>
         </div>
 
         <!-- Filters -->
-        <div class="card mb-4">
+        <div class="card mb-4 shadow-sm">
             <div class="card-body">
-                <div class="row g-3">
-                    <div class="col-md-3">
-                        <label class="form-label">Department</label>
-                        <select class="form-select">
-                            <option>All</option>
-                            <option>Tech</option>
-                            <option>Operations</option>
-                            <option>Support</option>
-                        </select>
+                <form method="GET" action="{{ route('talent-vaults.index') }}" class="row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Search</label>
+                        <input type="text" name="search" class="form-control" placeholder="Search by candidate name or position" value="{{ request('search') }}">
                     </div>
                     <div class="col-md-3">
-                        <label class="form-label">Verification Status</label>
-                        <select class="form-select">
-                            <option>All</option>
-                            <option>Clear</option>
-                            <option>Flagged</option>
-                            <option>Pending</option>
-                        </select>
-                    </div>
-                    <div class="col-md-3">
-                        <label class="form-label">Employee Status</label>
-                        <select class="form-select">
-                            <option>Active</option>
-                            <option>Inactive</option>
+                        <label class="form-label">Status</label>
+                        <select name="status" class="form-select">
+                            <option value="">All Status</option>
+                            <option value="applied" {{ request('status') == 'applied' ? 'selected' : '' }}>Applied</option>
+                            <option value="selected" {{ request('status') == 'selected' ? 'selected' : '' }}>Selected</option>
+                            <option value="rejected" {{ request('status') == 'rejected' ? 'selected' : '' }}>Rejected</option>
                         </select>
                     </div>
                     <div class="col-md-3 d-flex align-items-end">
-                        <button class="btn btn-outline-primary w-100">
+                        <button type="submit" class="btn btn-outline-primary w-100">
                             <i class="ri ri-filter-3-line"></i> Apply Filters
                         </button>
                     </div>
-                </div>
+                </form>
             </div>
         </div>
 
-        <!-- Employee Records Table -->
-        <div class="card">
+        <!-- Candidate Records Table -->
+        <div class="card shadow-sm">
             <div class="card-body p-0">
                 <div class="table-responsive">
                     <table class="table table-hover align-middle mb-0">
                         <thead class="table-light">
                             <tr>
-                                <th>Employee ID</th>
-                                <th>Name</th>
-                                <th>Department</th>
-                                <th>Designation</th>
-                                <th>Project Code</th>
-                                <th>Verification</th>
+                                <th>Candidate Name</th>
+                                <th>Position Applied</th>
                                 <th>Status</th>
+                                <th>Created Date</th>
                                 <th class="text-end">Action</th>
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <td>EMP-001</td>
-                                <td>Amit Das</td>
-                                <td>Tech</td>
-                                <td>Backend Developer</td>
-                                <td>RYDZAA-TECH-002</td>
-                                <td>
-                                    <span class="badge bg-success">Clear</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">Active</span>
-                                </td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewEmployeeModal">
-                                        View
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>EMP-002</td>
-                                <td>Neha Verma</td>
-                                <td>Operations</td>
-                                <td>Ops Executive</td>
-                                <td>RYDZAA-OPS-001</td>
-                                <td>
-                                    <span class="badge bg-warning">Pending</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-primary">Active</span>
-                                </td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewEmployeeModal">
-                                        View
-                                    </button>
-                                </td>
-                            </tr>
-                            <tr>
-                                <td>EMP-003</td>
-                                <td>Rohit Sharma</td>
-                                <td>Tech</td>
-                                <td>Project Manager</td>
-                                <td>RYDZAA-TECH-002</td>
-                                <td>
-                                    <span class="badge bg-danger">Flagged</span>
-                                </td>
-                                <td>
-                                    <span class="badge bg-secondary">Inactive</span>
-                                </td>
-                                <td class="text-end">
-                                    <button class="btn btn-sm btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#viewEmployeeModal">
-                                        View
-                                    </button>
-                                </td>
-                            </tr>
+                            @forelse($employees as $candidate)
+                                <tr>
+                                    <td>{{ $candidate->candidate_name }}</td>
+                                    <td>{{ $candidate->position_applied }}</td>
+                                    <td>
+                                        @if($candidate->status == 'applied')
+                                            <span class="badge bg-info">Applied</span>
+                                        @elseif($candidate->status == 'selected')
+                                            <span class="badge bg-success">Selected</span>
+                                        @else
+                                            <span class="badge bg-danger">Rejected</span>
+                                        @endif
+                                    </td>
+                                    <td>{{ $candidate->created_at->format('d M Y') }}</td>
+                                    <td class="text-end">
+                                        <a href="{{ route('talent-vaults.show', $candidate->id) }}" class="btn btn-sm btn-outline-primary">
+                                            View
+                                        </a>
+                                    </td>
+                                </tr>
+                            @empty
+                                <tr>
+                                    <td colspan="5" class="text-center py-4 text-muted">
+                                        <i class="ri-inbox-line me-2"></i>No candidates found
+                                    </td>
+                                </tr>
+                            @endforelse
                         </tbody>
                     </table>
                 </div>
             </div>
         </div>
 
-        <!-- Access Control -->
-        <div class="alert alert-warning mt-4">
-            <h6><i class="ri ri-shield-user-line me-1"></i>Access Control:</h6>
-            <ul class="mb-0">
-                <li><strong>HR</strong> - Full access: create, edit, upload</li>
-                <li><strong>Legal</strong> - Read Only: View flagged cases</li>
-                <li><strong>Finance HR</strong> - Read Only: View verified status before payroll</li>
-                <li><strong>Manager</strong> - No access (view via Onboard Pro Only)</li>
-            </ul>
+        <!-- Pagination -->
+        <div class="mt-3">
+            {{ $employees->links() }}
         </div>
+    
+           
 
         <!-- Add Employee Modal -->
         <div class="modal fade" id="addEmployeeModal" tabindex="-1" aria-labelledby="addEmployeeModalLabel" aria-hidden="true">
